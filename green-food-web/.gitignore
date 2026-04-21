@@ -2,7 +2,6 @@
 node_modules
 /dist
 
-
 # local env files
 .env.local
 .env.*.local
@@ -21,3 +20,12 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+*.code-workspace
+
+# Vue CLI cache
+.cache/
+.eslintcache
+
+# Test coverage (if using Jest)
+coverage/
+*.lcov
