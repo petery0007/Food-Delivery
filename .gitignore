@@ -1,10 +1,29 @@
-HELP.md
-target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# ==============================
+# 后端Spring Boot相关
+# ==============================
+src/target/
+src/.idea/
+src/*.iml
+src/.mvn/wrapper/maven-wrapper.jar
+src/HELP.md
 
-### STS ###
+# ==============================
+# 前端Vue项目相关（双重保险）
+# ==============================
+green-food-web/node_modules/
+green-food-web/dist/
+green-food-web/.idea/
+green-food-web/*.iml
+green-food-web/.DS_Store
+
+# ==============================
+# IDE配置（根目录和全项目）
+# ==============================
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
 .apt_generated
 .classpath
 .factorypath
@@ -12,22 +31,28 @@ target/
 .settings
 .springBeans
 .sts4-cache
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
 /nbproject/private/
 /nbbuild/
-/dist/
 /nbdist/
 /.nb-gradle/
 build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
-.vscode/
+# ==============================
+# 系统与临时文件
+# ==============================
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+*~
+
+# ==============================
+# 环境与日志文件
+# ==============================
+.env.local
+.env.*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
