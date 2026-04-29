@@ -15,4 +15,6 @@ public interface UserService {
 
     Result updatePassword(HttpServletRequest request,
                           PasswordUpdateRequest passwordUpdateRequest);
+
+    Result getUserInfo(HttpServletRequest request);
 }

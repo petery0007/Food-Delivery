@@ -1,10 +1,7 @@
 package com.xtu.service.impl;
 
 import com.xtu.mapper.UserMapper;
-import com.xtu.pojo.PasswordUpdateRequest;
-import com.xtu.pojo.User;
-import com.xtu.pojo.UserInfo;
-import com.xtu.pojo.UserInfoVO;
+import com.xtu.pojo.*;
 import com.xtu.service.UserService;
 import com.xtu.utils.JwtUtils;
 import com.xtu.utils.Result;
@@ -96,5 +93,15 @@ public class UserServiceImpl implements UserService {
         dto.setPassword(passwordUpdateRequest.getNewPassword());
         userMapper.updatePasswordById(dto);
         return Result.success(200, "修改成功");
+    }
+
+    @Override
+    public Result getUserInfo(HttpServletRequest request) {
+        String token = request.getHeader("token");
+        Claims claims = JwtUtils.parseToken(token);
+        Integer id = (Integer) claims.get("id");
+        User dto = userMapper.selectById(id);
+        UserInfo2 userInfo = new UserInfo2(dto.getId(), dto.getUsername(), dto.getRole(), dto.getMoney(),dto.getPhone());
+        return Result.success(200, "获取成功", userInfo);
     }
 }

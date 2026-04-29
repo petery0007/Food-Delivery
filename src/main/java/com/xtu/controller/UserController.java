@@ -7,10 +7,7 @@ import com.xtu.utils.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -18,6 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @GetMapping("/user/info")
+    public Result getUserInfo(HttpServletRequest request){
+        return userService.getUserInfo(request);
+    }
 
     @PutMapping("/user/info")
     public Result updateUser(HttpServletRequest request, @RequestBody User user){
