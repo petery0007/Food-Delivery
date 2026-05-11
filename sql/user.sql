@@ -62,9 +62,9 @@ VALUES ('qianbai', '123456', '13800000010', '320101199707071234', 'user', 250.00
 
 
 -- 配送员
--- 1. 配送员管理员（余额500）
+-- 1. 配送员（余额500）
 INSERT INTO `PEISONG` (`username`, `password`, `phone`, `id_number`, `role`, `money`)
-VALUES ('courier_admin', 'admin123', '13900000001', '110101199001012233', 'PEISONG', 500.00);
+VALUES ('chenzi', '55524211', '13900000001', '110101199001012233', 'PEISONG', 500.00);
 
 -- 2. 配送员 李雷（余额120.50）
 INSERT INTO `PEISONG` (`username`, `password`, `phone`, `id_number`, `role`, `money`)
