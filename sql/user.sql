@@ -15,6 +15,8 @@ CREATE TABLE user
         UNIQUE (username)
 ) COMMENT '用户表';
 
+
+
 -- 1. 管理员用户（余额1000）
 INSERT INTO `user` (`username`, `password`, `phone`, `id_number`, `role`, `money`)
 VALUES ('admin', 'admin123', '13800000001', '110101199001011234', 'admin', 1000.00);
@@ -54,3 +56,48 @@ VALUES ('zhengshi', '123456', '13800000009', '610101199909096789', 'user', 0.00)
 -- 10. 普通用户钱百（余额250）
 INSERT INTO `user` (`username`, `password`, `phone`, `id_number`, `role`, `money`)
 VALUES ('qianbai', '123456', '13800000010', '320101199707071234', 'user', 250.00);
+
+
+
+
+
+
+-- 1. 配送员管理员（余额500）
+INSERT INTO `courier` (`username`, `password`, `phone`, `id_number`, `role`, `money`)
+VALUES ('courier_admin', 'admin123', '13900000001', '110101199001012233', 'courier', 500.00);
+
+-- 2. 配送员 李雷（余额120.50）
+INSERT INTO `courier` (`username`, `password`, `phone`, `id_number`, `role`, `money`)
+VALUES ('lilei', '123456', '13900000002', '310101199506067788', 'courier', 120.50);
+
+-- 3. 配送员 韩梅梅（无身份证号，余额80）
+INSERT INTO `courier` (`username`, `password`, `phone`, `role`, `money`)
+VALUES ('hanmeimei', '123456', '13900000003', 'courier', 80.00);
+
+-- 4. 配送员 张伟（余额300.25）
+INSERT INTO `courier` (`username`, `password`, `phone`, `id_number`, `role`, `money`)
+VALUES ('zhangwei', '123456', '13900000004', '440101199809098877', 'courier', 300.25);
+
+-- 5. 配送员 刘芳（余额180）
+INSERT INTO `courier` (`username`, `password`, `phone`, `id_number`, `role`, `money`)
+VALUES ('liufang', '123456', '13900000005', '510101200001015544', 'courier', 180.00);
+
+-- 6. 配送员 王强（无身份证号，余额50）
+INSERT INTO `courier` (`username`, `password`, `phone`, `role`, `money`)
+VALUES ('wangqiang', '123456', '13900000006', 'courier', 50.00);
+
+-- 7. 配送员 陈丽（余额420.60）
+INSERT INTO `courier` (`username`, `password`, `phone`, `id_number`, `role`, `money`)
+VALUES ('chenli', '123456', '13900000007', '120101199204042233', 'courier', 420.60);
+
+-- 8. 配送员 杨明（无身份证号，余额95.30）
+INSERT INTO `courier` (`username`, `password`, `phone`, `role`, `money`)
+VALUES ('yangming', '123456', '13900000008', 'courier', 95.30);
+
+-- 9. 配送员 黄俊（余额0）
+INSERT INTO `courier` (`username`, `password`, `phone`, `id_number`, `role`, `money`)
+VALUES ('huangjun', '123456', '13900000009', '610101199910107788', 'courier', 0.00);
+
+-- 10. 配送员 吴浩（余额280）
+INSERT INTO `courier` (`username`, `password`, `phone`, `id_number`, `role`, `money`)
+VALUES ('wuhao', '123456', '13900000010', '320101199708082233', 'courier', 280.00);
