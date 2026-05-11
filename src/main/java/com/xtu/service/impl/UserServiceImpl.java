@@ -54,6 +54,10 @@ public class UserServiceImpl implements UserService {
         if(!user.getPassword().equals(dto.getPassword())){
             return Result.error(400, "密码错误");
         }
+        //判断角色是否正确
+        if(!user.getRole().equals(dto.getRole())){
+            return Result.error(400, "角色不匹配");
+        }
         //生成token
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", user.getId());
