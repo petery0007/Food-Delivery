@@ -4,6 +4,7 @@ import com.xtu.pojo.Product;
 import com.xtu.pojo.ProductInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -32,4 +33,7 @@ public interface ProductMapper {
 
     @Select("SELECT COUNT(*) FROM products WHERE name LIKE CONCAT('%', #{keywords}, '%')")
     Integer countProductsByKeywords(String keywords);
+
+    @Update("UPDATE products SET status = #{status} WHERE id = #{id}")
+    Boolean upProductsStatusById(Integer id, String status);
 }

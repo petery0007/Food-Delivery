@@ -105,4 +105,11 @@ public class ProductServiceImpl implements ProductService {
 
         return Result.success(200, "获取成功", data);
     }
+
+    @Override
+    public Result updateStatusById(Integer id, String status) {
+        log.info("更新商品状态，id: {}, status: {}", id, status);
+        productMapper.upProductsStatusById(id, status);
+        return Result.success(200, "更新成功");
+    }
 }

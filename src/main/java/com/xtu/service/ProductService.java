@@ -7,4 +7,6 @@ public interface ProductService {
     Result getAllProducts(Integer page, Integer pageSize);
 
     Result getProductsByPage(Integer page, Integer pageSize, ProductInfo productInfo);
+
+    Result updateStatusById(Integer id, String status);
 }

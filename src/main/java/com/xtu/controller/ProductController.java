@@ -1,6 +1,7 @@
 package com.xtu.controller;
 
 import com.xtu.pojo.ProductInfo;
+import com.xtu.pojo.ProductStatusRequest;
 import com.xtu.pojo.User;
 import com.xtu.pojo.UserInfoVO;
 import com.xtu.service.ProductService;
@@ -26,7 +27,13 @@ public class ProductController {
     @GetMapping("/list")
     public Result getProductsByKeywordsAndSpecification(@RequestParam(defaultValue = "1") Integer page,
                                     @RequestParam(defaultValue = "10") Integer pageSize,
-                                    @RequestBody ProductInfo productInfo){
+                                    @ModelAttribute ProductInfo productInfo){
         return productService.getProductsByPage(page, pageSize, productInfo);
+    }
+
+    @PostMapping("/status/{id}")
+    public Result updateStatus(@PathVariable Integer id, @RequestBody ProductStatusRequest productStatusRequest) {
+        log.info("修改商品状态，id: {}, status: {}", id, productStatusRequest);
+        return productService.updateStatusById(id, productStatusRequest.getStatus());
     }
 }
