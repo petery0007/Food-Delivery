@@ -46,4 +46,22 @@ public interface ProductMapper {
 
     @Select("SELECT COUNT(*) FROM products WHERE status = '上架'")
     Integer countProductsShangjia();
+
+    @Select("SELECT * FROM products WHERE specification LIKE CONCAT('%', #{specification}, '%') AND status = '上架' ORDER BY id ASC LIMIT #{offset}, #{pageSize}")
+    List<Product> selectBySpecificationShangjia(int offset, Integer pageSize, String specification);
+
+    @Select("SELECT COUNT(*) FROM products WHERE specification LIKE CONCAT('%', #{specification}, '%') AND status = '上架'")
+    Integer countProductsBySpecificationShangjia(String specification);
+
+    @Select("SELECT * FROM products WHERE name LIKE CONCAT('%', #{keywords}, '%') AND status = '上架' ORDER BY id ASC LIMIT #{offset}, #{pageSize}")
+    List<Product> selectByKeywordsShangjia(int offset, Integer pageSize, String keywords);
+
+    @Select("SELECT COUNT(*) FROM products WHERE name LIKE CONCAT('%', #{keywords}, '%') AND status = '上架'")
+    Integer countProductsByKeywordsShangjia(String keywords);
+
+    @Select("SELECT * FROM products WHERE name LIKE CONCAT('%', #{keywords}, '%') AND specification LIKE CONCAT('%', #{specification}, '%') AND status = '上架' ORDER BY id ASC LIMIT #{offset}, #{pageSize}")
+    List<Product> selectByKeywordsAndSpecificationShangjia(int offset, Integer pageSize, String specification, String keywords);
+
+    @Select("SELECT COUNT(*) FROM products WHERE name LIKE CONCAT('%', #{keywords}, '%') AND specification LIKE CONCAT('%', #{specification}, '%') AND status = '上架'")
+    Integer countProductsByKeywordsAndSpecificationShangjia(String specification, String keywords);
 }

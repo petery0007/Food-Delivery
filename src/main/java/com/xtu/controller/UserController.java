@@ -1,6 +1,7 @@
 package com.xtu.controller;
 
 import com.xtu.pojo.PasswordUpdateRequest;
+import com.xtu.pojo.ProductInfo;
 import com.xtu.pojo.User;
 import com.xtu.pojo.UserAmount;
 import com.xtu.service.UserService;
@@ -45,5 +46,12 @@ public class UserController {
     public Result getUserProducts(@RequestParam(defaultValue = "1") Integer page,
                                   @RequestParam(defaultValue = "10") Integer pageSize){
         return userService.getAllProducts(page, pageSize);
+    }
+
+    @GetMapping("/user/products/list")
+    public Result getUserProductsList(@RequestParam(defaultValue = "1") Integer page,
+                                      @RequestParam(defaultValue = "10") Integer pageSize,
+                                      @ModelAttribute ProductInfo productInfo){
+        return userService.getProductsByKeywordsAndSpecification(page, pageSize, productInfo);
     }
 }

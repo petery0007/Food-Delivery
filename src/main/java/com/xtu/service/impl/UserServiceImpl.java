@@ -134,4 +134,64 @@ public class UserServiceImpl implements UserService {
         data.put("total", total);
         return Result.success(200, "获取成功", data);
     }
+
+    @Override
+    public Result getProductsByKeywordsAndSpecification(Integer page, Integer pageSize, ProductInfo productInfo) {
+        log.info("获取商品列表，页码: {}, 每页数量: {}", page, pageSize);
+
+        if (page == null || page < 1) {
+            page = 1;
+        }
+        if (pageSize == null || pageSize < 1 || pageSize > 100) {
+            pageSize = 10;
+        }
+
+        int offset = (page - 1) * pageSize;
+
+        if(productInfo == null){
+            List<Product> products = productMapper.selectByPageShangjia(offset, pageSize);
+            Integer total = productMapper.countProductsShangjia();
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", products);
+            data.put("total", total);
+
+            return Result.success(200, "获取成功", data);
+        }
+        else if(productInfo.getKeywords() == null){
+            List<Product> products = productMapper.selectBySpecificationShangjia(offset, pageSize, productInfo.getSpecification());
+            Integer total = productMapper.countProductsBySpecificationShangjia(productInfo.getSpecification());
+            if(total == null){
+                return Result.error(401, "查询商品不存在");
+            }
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", products);
+            data.put("total", total);
+            return Result.success(200, "获取成功", data);
+        } else if (productInfo.getSpecification() == null) {
+            List<Product> products = productMapper.selectByKeywordsShangjia(offset, pageSize, productInfo.getKeywords());
+            Integer total = productMapper.countProductsByKeywordsShangjia(productInfo.getKeywords());
+            if(total == null){
+                return Result.error(401, "查询商品不存在");
+            }
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", products);
+            data.put("total", total);
+            return Result.success(200, "获取成功", data);
+
+        }
+
+
+
+        List<Product> products = productMapper.selectByKeywordsAndSpecificationShangjia(offset, pageSize, productInfo.getSpecification(), productInfo.getKeywords());
+        Integer total = productMapper.countProductsByKeywordsAndSpecificationShangjia(productInfo.getSpecification(), productInfo.getKeywords());
+        if(total == null){
+            return Result.error(401, "查询商品不存在");
+        }
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", products);
+        data.put("total", total);
+
+        return Result.success(200, "获取成功", data);
+    }
 }

@@ -1,6 +1,7 @@
 package com.xtu.service;
 
 import com.xtu.pojo.PasswordUpdateRequest;
+import com.xtu.pojo.ProductInfo;
 import com.xtu.pojo.User;
 import com.xtu.pojo.UserInfoVO;
 import com.xtu.utils.Result;
@@ -23,4 +24,6 @@ public interface UserService {
     Result updateUserMoney(HttpServletRequest request, BigDecimal amount);
 
     Result getAllProducts(Integer page, Integer pageSize);
+
+    Result getProductsByKeywordsAndSpecification(Integer page, Integer pageSize, ProductInfo productInfo);
 }
