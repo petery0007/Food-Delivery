@@ -21,4 +21,6 @@ public interface UserService {
     Result getUserInfo(HttpServletRequest request);
 
     Result updateUserMoney(HttpServletRequest request, BigDecimal amount);
+
+    Result getAllProducts(Integer page, Integer pageSize);
 }

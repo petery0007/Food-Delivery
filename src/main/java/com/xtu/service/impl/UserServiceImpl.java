@@ -1,5 +1,6 @@
 package com.xtu.service.impl;
 
+import com.xtu.mapper.ProductMapper;
 import com.xtu.mapper.UserMapper;
 import com.xtu.pojo.*;
 import com.xtu.service.UserService;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -21,6 +23,8 @@ import java.util.Map;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private ProductMapper productMapper;
     @Override
     public Result register(User user) {
         //判断用户名是否存在
@@ -117,5 +121,17 @@ public class UserServiceImpl implements UserService {
         Integer id = (Integer) claims.get("id");
         userMapper.updateUserMoney(id, amount);
         return Result.success(200, "充值成功");
+    }
+
+    @Override
+    public Result getAllProducts(Integer page, Integer pageSize) {
+        log.info("获取商品列表，页码: {}, 每页数量: {}", page, pageSize);
+        Integer offset = (page - 1) * pageSize;
+        List<Product> products = productMapper.selectByPageShangjia(offset, pageSize);
+        Integer total = productMapper.countProductsShangjia();
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", products);
+        data.put("total", total);
+        return Result.success(200, "获取成功", data);
     }
 }

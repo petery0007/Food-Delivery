@@ -40,4 +40,10 @@ public interface ProductMapper {
 
     @Insert("INSERT INTO products (name, image_url, specification, stock, price, click_count, status, producer, description) VALUES (#{name}, #{imageUrl}, #{specification}, #{stock}, #{price}, #{clickCount}, #{status}, #{producer}, #{description})")
     void addProduct(Product product);
+
+    @Select("SELECT * FROM products WHERE status = '上架' ORDER BY id ASC LIMIT #{offset}, #{pageSize}")
+    List<Product> selectByPageShangjia(Integer offset, Integer pageSize);
+
+    @Select("SELECT COUNT(*) FROM products WHERE status = '上架'")
+    Integer countProductsShangjia();
 }

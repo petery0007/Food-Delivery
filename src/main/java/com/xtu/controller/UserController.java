@@ -40,4 +40,10 @@ public class UserController {
                            @RequestBody UserAmount userAmount){
         return userService.updateUserMoney(request ,userAmount.getAmount());
     }
+
+    @GetMapping("/user/products")
+    public Result getUserProducts(@RequestParam(defaultValue = "1") Integer page,
+                                  @RequestParam(defaultValue = "10") Integer pageSize){
+        return userService.getAllProducts(page, pageSize);
+    }
 }
