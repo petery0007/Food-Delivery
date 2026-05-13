@@ -1,5 +1,6 @@
 package com.xtu.controller;
 
+import com.xtu.pojo.ProductInfo;
 import com.xtu.pojo.User;
 import com.xtu.pojo.UserInfoVO;
 import com.xtu.service.ProductService;
@@ -23,8 +24,9 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public Result getProductsByPage(@RequestParam(defaultValue = "1") Integer page,
-                                    @RequestParam(defaultValue = "10") Integer pageSize){
-        return null;
+    public Result getProductsByKeywordsAndSpecification(@RequestParam(defaultValue = "1") Integer page,
+                                    @RequestParam(defaultValue = "10") Integer pageSize,
+                                    @RequestBody ProductInfo productInfo){
+        return productService.getProductsByPage(page, pageSize, productInfo);
     }
 }

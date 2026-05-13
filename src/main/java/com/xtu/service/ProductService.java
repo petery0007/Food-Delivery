@@ -1,7 +1,10 @@
 package com.xtu.service;
 
+import com.xtu.pojo.ProductInfo;
 import com.xtu.utils.Result;
 
 public interface ProductService {
     Result getAllProducts(Integer page, Integer pageSize);
+
+    Result getProductsByPage(Integer page, Integer pageSize, ProductInfo productInfo);
 }
