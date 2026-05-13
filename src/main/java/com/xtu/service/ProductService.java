@@ -9,4 +9,6 @@ public interface ProductService {
     Result getProductsByPage(Integer page, Integer pageSize, ProductInfo productInfo);
 
     Result updateStatusById(Integer id, String status);
+
+    Result deleteProductById(Integer id);
 }

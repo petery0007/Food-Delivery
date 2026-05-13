@@ -36,4 +36,9 @@ public class ProductController {
         log.info("修改商品状态，id: {}, status: {}", id, productStatusRequest);
         return productService.updateStatusById(id, productStatusRequest.getStatus());
     }
+
+    @DeleteMapping("/{id}")
+    public Result deleteProduct(@PathVariable Integer id) {
+        return productService.deleteProductById(id);
+    }
 }

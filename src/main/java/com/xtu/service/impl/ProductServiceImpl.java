@@ -112,4 +112,11 @@ public class ProductServiceImpl implements ProductService {
         productMapper.upProductsStatusById(id, status);
         return Result.success(200, "更新成功");
     }
+
+    @Override
+    public Result deleteProductById(Integer id) {
+        log.info("删除商品，id: {}", id);
+        productMapper.deleteProductById(id);
+        return Result.success(200, "删除成功");
+    }
 }

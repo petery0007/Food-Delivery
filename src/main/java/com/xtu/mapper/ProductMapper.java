@@ -2,6 +2,7 @@ package com.xtu.mapper;
 
 import com.xtu.pojo.Product;
 import com.xtu.pojo.ProductInfo;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -36,4 +37,7 @@ public interface ProductMapper {
 
     @Update("UPDATE products SET status = #{status} WHERE id = #{id}")
     Boolean upProductsStatusById(Integer id, String status);
+
+    @Delete("DELETE FROM products WHERE id = #{id}")
+    void deleteProductById(Integer id);
 }
