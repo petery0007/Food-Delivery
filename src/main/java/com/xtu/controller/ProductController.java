@@ -26,7 +26,7 @@ public class ProductController {
     @GetMapping("/list")
     public Result getProductsByKeywordsAndSpecification(@RequestParam(defaultValue = "1") Integer page,
                                     @RequestParam(defaultValue = "10") Integer pageSize,
-                                    @RequestBody ProductInfo productInfo){
+                                    @ModelAttribute ProductInfo productInfo){
         return productService.getProductsByPage(page, pageSize, productInfo);
     }
 }
