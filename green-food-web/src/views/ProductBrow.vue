@@ -196,33 +196,73 @@ export default {
     async loadProductList(page, pageSize, sortBy, keywords, specification) {
       this.loading = true;
       try {
-        let targetUrl = keywords || specification ? '/products/list' : '/products';
+        // 检查 token 是否存在
+        const token = localStorage.getItem('token');
+        if (!token) {
+          this.$message.warning('请先登录');
+          this.$router.push('/login');
+          return;
+        }
 
-        const res = await request.get(targetUrl, {
-          params: {
-            page: page,
-            size: pageSize,
-            keywords: keywords,
-            specification: specification,
-            status: '上架' // 关键：只请求上架状态的商品
-          }
-        });
+        // 根据是否有搜索条件选择接口
+        let targetUrl = '';
+        let params = {};
 
-        // 兼容不同后端返回格式
-        let rawData = res.data?.list || res.data?.records || [];
+        if (keywords || specification) {
+          // 有搜索条件，使用筛选接口
+          targetUrl = '/user/products/list';
+          params = {
+            page: page || this.currentPage,
+            pageSize: pageSize || this.pageSize,
+            keywords: keywords || '',
+            specification: specification || ''
+          };
+        } else {
+          // 无搜索条件，使用普通分页接口
+          targetUrl = '/user/products';
+          params = {
+            page: page || this.currentPage,
+            pageSize: pageSize || this.pageSize
+          };
+        }
 
-        // 前端二次过滤，确保只显示上架商品（双重保险）
-        this.tableData = rawData.filter(item => item.status === '上架');
-        this.totalCount = this.tableData.length; // 如果后端返回的total包含下架商品，这里需要调整
+        console.log('请求接口:', targetUrl);
+        console.log('请求参数:', params);
+
+        const res = await request.get(targetUrl, { params });
+
+        console.log('后端返回数据:', res);
+
+        // 后端返回格式: { list: [...], total: ... }
+        if (res.data && res.data.list) {
+          this.tableData = res.data.list;
+          this.totalCount = res.data.total || 0;
+          console.log('商品列表加载成功，共', this.totalCount, '条记录');
+        } else {
+          console.warn('数据格式异常:', res);
+          this.tableData = [];
+          this.totalCount = 0;
+        }
       } catch (error) {
         console.error('商品列表加载失败：', error);
-        this.$message.error('商品加载失败，请稍后重试');
+        console.error('错误详情:', error.response);
+
+        // 如果是 401 错误，跳转到登录页
+        if (error.response && error.response.status === 401) {
+          this.$message.warning('登录已过期，请重新登录');
+          localStorage.clear();
+          this.$router.push('/login');
+        } else {
+          this.$message.error('商品加载失败，请稍后重试');
+        }
+
         this.tableData = [];
         this.totalCount = 0;
       } finally {
         this.loading = false;
       }
     },
+
 
     // 搜索按钮
     onSearchButtonClick() {
