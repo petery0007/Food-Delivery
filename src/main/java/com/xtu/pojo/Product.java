@@ -18,4 +18,7 @@ public class Product {
     private BigDecimal price;//价格
     private Integer clickCount;//点击数
     private String status; //是否上架
+
+    private String producer;//生产者
+    private String description;//描述
 }

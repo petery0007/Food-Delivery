@@ -1,9 +1,6 @@
 package com.xtu.controller;
 
-import com.xtu.pojo.ProductInfo;
-import com.xtu.pojo.ProductStatusRequest;
-import com.xtu.pojo.User;
-import com.xtu.pojo.UserInfoVO;
+import com.xtu.pojo.*;
 import com.xtu.service.ProductService;
 import com.xtu.service.UserService;
 import com.xtu.utils.Result;
@@ -40,5 +37,11 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public Result deleteProduct(@PathVariable Integer id) {
         return productService.deleteProductById(id);
+    }
+
+    @PostMapping("/add")
+    public Result addProduct(@RequestBody Product product) {
+        log.info("添加商品，product: {}", product);
+        return productService.addProduct(product);
     }
 }

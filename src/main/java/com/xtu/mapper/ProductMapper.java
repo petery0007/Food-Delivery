@@ -2,10 +2,7 @@ package com.xtu.mapper;
 
 import com.xtu.pojo.Product;
 import com.xtu.pojo.ProductInfo;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -40,4 +37,7 @@ public interface ProductMapper {
 
     @Delete("DELETE FROM products WHERE id = #{id}")
     void deleteProductById(Integer id);
+
+    @Insert("INSERT INTO products (name, image_url, specification, stock, price, click_count, status, producer, description) VALUES (#{name}, #{imageUrl}, #{specification}, #{stock}, #{price}, #{clickCount}, #{status}, #{producer}, #{description})")
+    void addProduct(Product product);
 }
