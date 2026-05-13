@@ -1,5 +1,5 @@
--- 创建 product 表（保持原结构不变）
-CREATE TABLE product (
+-- 创建 products 表（保持原结构不变）
+CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
     name VARCHAR(50) NOT NULL COMMENT '商品名称',
     image_url VARCHAR(255) COMMENT '图片URL',
@@ -11,7 +11,7 @@ CREATE TABLE product (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品表';
 
 -- 插入40条数据（原15条保留，新增25条，全部使用稳定图片源）
-INSERT INTO product (name, image_url, specification, stock, price, click_count, status) VALUES
+INSERT INTO products (name, image_url, specification, stock, price, click_count, status) VALUES
 -- 原15条数据（图片链接已验证稳定性）
 ('番茄', 'https://img95.699pic.com/photo/60078/6274.jpg_wh860.jpg', '新鲜蔬菜', 200, 3.50, 100, '上架'),
 ('生菜', 'https://tse1-mm.cn.bing.net/th/id/OIP-C.j2OALSUDcnMgInX8hW0ITQHaE7?rs=1&pid=ImgDetMain', '新鲜蔬菜', 150, 2.80, 80, '上架'),
