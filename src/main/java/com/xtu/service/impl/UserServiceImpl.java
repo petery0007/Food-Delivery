@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -107,5 +108,14 @@ public class UserServiceImpl implements UserService {
         User dto = userMapper.selectById(id);
         UserInfo2 userInfo = new UserInfo2(dto.getId(), dto.getUsername(), dto.getRole(), dto.getMoney(),dto.getPhone());
         return Result.success(200, "获取成功", userInfo);
+    }
+
+    @Override
+    public Result updateUserMoney(HttpServletRequest request, BigDecimal amount) {
+        String token = request.getHeader("token");
+        Claims claims = JwtUtils.parseToken(token);
+        Integer id = (Integer) claims.get("id");
+        userMapper.updateUserMoney(id, amount);
+        return Result.success(200, "充值成功");
     }
 }

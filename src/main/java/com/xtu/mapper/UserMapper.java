@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.math.BigDecimal;
+
 @Mapper
 public interface UserMapper {
     @Select("select * from user where username = #{username}")
@@ -20,4 +22,6 @@ public interface UserMapper {
     void updateInfoById(User dto);
     @Update("update user set password = #{password} where id = #{id}")
     void updatePasswordById(User dto);
+    @Update("update user set money = money + #{amount} where id = #{id}")
+    void updateUserMoney(Integer id, BigDecimal amount);
 }
