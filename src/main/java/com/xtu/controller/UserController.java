@@ -2,12 +2,15 @@ package com.xtu.controller;
 
 import com.xtu.pojo.PasswordUpdateRequest;
 import com.xtu.pojo.User;
+import com.xtu.pojo.UserAmount;
 import com.xtu.service.UserService;
 import com.xtu.utils.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 @RestController
 @Slf4j
@@ -30,5 +33,11 @@ public class UserController {
     public Result updatePassword(HttpServletRequest request,
                                  @RequestBody PasswordUpdateRequest passwordUpdateRequest){
         return userService.updatePassword(request , passwordUpdateRequest);
+    }
+
+    @PostMapping("/user/recharge")
+    public Result recharge(HttpServletRequest request,
+                           @RequestBody UserAmount userAmount){
+        return userService.updateUserMoney(request ,userAmount.getAmount());
     }
 }

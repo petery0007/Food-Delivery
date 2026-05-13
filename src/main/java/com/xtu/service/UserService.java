@@ -6,6 +6,8 @@ import com.xtu.pojo.UserInfoVO;
 import com.xtu.utils.Result;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.math.BigDecimal;
+
 public interface UserService {
     Result register(User user);
 
@@ -17,4 +19,6 @@ public interface UserService {
                           PasswordUpdateRequest passwordUpdateRequest);
 
     Result getUserInfo(HttpServletRequest request);
+
+    Result updateUserMoney(HttpServletRequest request, BigDecimal amount);
 }
