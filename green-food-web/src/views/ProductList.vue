@@ -77,6 +77,10 @@
           </el-select>
         </el-form-item>
 
+        <el-form-item label="生产厂家" prop="producer">
+          <el-input v-model="addForm.producer" placeholder="请输入生产厂家名称"></el-input>
+        </el-form-item>
+
         <el-form-item label="商品照片URL" prop="imageUrl">
           <el-input v-model="addForm.imageUrl" placeholder="请输入图片网络链接地址 (如: http://...)"></el-input>
           <!-- 实时预览小图 -->
@@ -151,8 +155,10 @@ export default {
         imageUrl: '',
         price: 1.00,
         stock: 100,
+        clickCount: 0,
         status: '上架',
-        description: ''
+        description: '',
+        producer: ''
       },
 
       // 【新增】：严格的表单校验规则
@@ -162,7 +168,8 @@ export default {
         imageUrl: [{ required: true, message: '请输入图片URL', trigger: 'blur' }],
         price: [{ required: true, message: '请输入商品价格', trigger: 'blur' }],
         stock: [{ required: true, message: '请输入商品库存', trigger: 'blur' }],
-        status: [{ required: true, message: '请选择上架状态', trigger: 'change' }]
+        status: [{ required: true, message: '请选择上架状态', trigger: 'change' }],
+        producer: [{ required: true, message: '请输入生产厂家', trigger: 'blur' }]
       }
     }
   },
@@ -272,8 +279,10 @@ export default {
       // 将数据重置为默认值
       this.addForm.price = 1.00;
       this.addForm.stock = 100;
+      this.addForm.clickCount = 0;
       this.addForm.status = '上架';
       this.addForm.description = '';
+      this.addForm.producer = '';
     }
 
     // ================= 【新增方法结束】 =================
