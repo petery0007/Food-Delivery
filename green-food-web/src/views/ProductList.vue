@@ -183,7 +183,7 @@ export default {
 
     loadProductData(page, pageSize, sortBy, keywords, specification) {
       this.loading = true;
-      let targetUrl = keywords || specification ? 'admin/products/list' : 'admin/products';
+      let targetUrl = keywords || specification ? '/admin/products/list' : '/admin/products';
 
       request.get(targetUrl, {
         params: {
@@ -219,7 +219,7 @@ export default {
     toggleProductStatus(row) {
       const newStatus = row.status === '上架' ? '下架' : '上架';
       this.$confirm(`确定要将该商品 ${newStatus} 吗?`, '提示').then(() => {
-        request.post(`admin/products/status/${row.id}`, { status: newStatus }).then(res => {
+        request.post(`/admin/products/status/${row.id}`, { status: newStatus }).then(res => {
           this.$message.success('状态更新成功');
           this.initializeProductPage();
         });
@@ -228,7 +228,7 @@ export default {
 
     deleteProduct(productId) {
       this.$confirm('确定要删除吗?', '警告', { type: 'error' }).then(() => {
-        request.delete(`admin/products/${productId}`).then(res => {
+        request.delete(`/admin/products/${productId}`).then(res => {
           this.$message.success('删除成功');
           this.initializeProductPage();
         });
@@ -251,7 +251,7 @@ export default {
 
           // 依据之前文档的接口，向 /products/add 发送新增请求
           // 这里使用 /admin/products 符合 PDF 接口文档规范
-          request.post('admin/products/add', this.addForm).then(res => {
+          request.post('/admin/products/add', this.addForm).then(res => {
             this.submitLoading = false;
             this.addDialogVisible = false; // 关闭弹窗
             this.$message.success('商品添加成功！');
