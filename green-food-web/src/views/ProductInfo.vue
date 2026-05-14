@@ -174,9 +174,7 @@ export default {
       this.loading = true
       try {
         // 根据路由判断使用哪个接口
-        const apiUrl = this.isUserView
-            ? `/user/products/${this.productId}`
-            : `/admin/products/${this.productId}`
+        const apiUrl = `/products/${this.productId}`
 
         const res = await request.get(apiUrl)
 
