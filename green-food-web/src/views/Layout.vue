@@ -29,6 +29,7 @@
         <template v-if="currentRole === 'user'">
           <el-menu-item index="/layout/profile"><i class="el-icon-s-custom"></i>个人中心</el-menu-item>
           <el-menu-item index="/layout/shop"><i class="el-icon-shopping-cart-2"></i>浏览商品信息</el-menu-item>
+          <el-menu-item index="/layout/cart"><i class="el-icon-shopping-cart-1"></i>购物车</el-menu-item>
           <el-menu-item index="/layout/my-orders"><i class="el-icon-s-ticket"></i>我的订单管理</el-menu-item>
           <el-menu-item index="/layout/reviews"><i class="el-icon-chat-dot-round"></i>我的商品评价</el-menu-item>
         </template>

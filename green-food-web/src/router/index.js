@@ -55,7 +55,13 @@ const routes = [
                 name: 'ProductInfoUser',
                 component: () => import('../views/ProductInfo.vue'),
                 props: true
-            }
+            },
+            // 新增用户端购物车界面
+            {
+                path: 'cart',
+                name: 'ShoppingCart',
+                component: () => import('../views/ShoppingCart.vue')
+            },
         ]
     }
 ]

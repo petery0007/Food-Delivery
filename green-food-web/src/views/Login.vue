@@ -96,6 +96,7 @@ export default {
 
             // 存储在本地 (后续请求头会自动带上 token)
             localStorage.setItem('token', token);
+            localStorage.setItem('userId', userInfo.id);
             localStorage.setItem('userRole', userInfo.role);
             localStorage.setItem('userName', userInfo.username);
 
