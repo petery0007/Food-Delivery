@@ -49,14 +49,14 @@
                   :src="item.imageUrl"
                   :alt="item.name"
                   @error="handleImageError($event)"
-                  @click="viewProductDetail(item)"
+                  @click="viewProductInfo(item)"
                   style="cursor: pointer;"
               >
             </div>
 
             <!-- 商品信息 -->
             <div class="product-info" style="padding: 15px;">
-              <h3 class="product-name" :title="item.name" @click="viewProductDetail(item)" style="cursor: pointer;">{{ item.name }}</h3>
+              <h3 class="product-name" :title="item.name" @click="viewProductInfo(item)" style="cursor: pointer;">{{ item.name }}</h3>
               <div class="product-spec">{{ item.specification }}</div>
               <div class="product-price">
                 <span class="current-price">¥{{ item.price }}</span>
@@ -98,64 +98,6 @@
       >
       </el-pagination>
     </div>
-
-    <!-- 4. 商品详情弹窗 -->
-    <el-dialog
-        title="商品详情"
-        :visible.sync="detailDialogVisible"
-        width="700px"
-        close-on-click-modal
-    >
-      <div class="detail-content" v-if="currentProduct">
-        <el-row :gutter="20">
-          <!-- 商品大图 -->
-          <el-col :span="10">
-            <div class="detail-image">
-              <img
-                  :src="currentProduct.imageUrl"
-                  :alt="currentProduct.name"
-                  @error="handleImageError($event)"
-              >
-            </div>
-          </el-col>
-
-          <!-- 商品信息 -->
-          <el-col :span="14">
-            <h2 class="detail-name">{{ currentProduct.name }}</h2>
-            <div class="detail-spec">商品类型：{{ currentProduct.specification }}</div>
-            <div class="detail-price">
-              <span class="current-price">¥{{ currentProduct.price }}</span>
-              <span class="stock">库存：{{ currentProduct.stock }} 件</span>
-              <el-tag type="success" style="margin-left: 10px;">在售</el-tag>
-            </div>
-            <div class="detail-click">浏览次数：{{ currentProduct.clickCount }} 次</div>
-
-            <div class="detail-actions" style="margin-top: 20px;">
-              <el-button
-                  type="success"
-                  size="medium"
-                  @click="addToCart(currentProduct)"
-                  :disabled="currentProduct.stock <= 0"
-              >
-                <i class="el-icon-shopping-cart-2"></i> 立即加入购物车
-              </el-button>
-            </div>
-          </el-col>
-        </el-row>
-
-        <!-- 商品描述 -->
-        <div class="detail-description" style="margin-top: 30px;">
-          <h3>商品简介</h3>
-          <div class="description-content" v-html="myFilters(currentProduct.description)">
-            {{ currentProduct.description || '暂无商品描述' }}
-          </div>
-        </div>
-      </div>
-
-      <div slot="footer">
-        <el-button @click="detailDialogVisible = false">关闭</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -182,10 +124,6 @@ export default {
       // 商品列表数据（只包含上架商品）
       tableData: [],
       loading: false,
-
-      // 商品详情弹窗
-      detailDialogVisible: false,
-      currentProduct: null
     }
   },
   mounted() {
@@ -282,7 +220,7 @@ export default {
         specification: ''
       };
       this.currentPage = 1;
-      this.loadProductList();
+      this.loadProductList(this.currentPage, this.pageSize, 'create_time', this.queryParams.keywords, this.queryParams.specification);
     },
 
     // 分页切换
@@ -294,9 +232,12 @@ export default {
     },
 
     // 查看商品详情
-    viewProductDetail(product) {
-      this.currentProduct = { ...product };
-      this.detailDialogVisible = true;
+    viewProductInfo(product) {
+      this.$router.push({
+        name: 'ProductInfoUser',
+        params: { id: product.id },
+        query:{ from: 'shop'}
+      })
 
       // 可选：调用接口增加浏览次数
       // request.post(`/products/click/${product.id}`);
