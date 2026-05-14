@@ -1,5 +1,6 @@
 package com.xtu.controller;
 
+import com.xtu.pojo.Cart;
 import com.xtu.service.CartService;
 import com.xtu.utils.Result;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +15,13 @@ public class CartController {
 
     @Autowired
     private CartService cartService;
+
+    // 添加购物车
+    @PostMapping("/cart/add")
+    public Result addCart(HttpServletRequest request, @RequestBody Cart cart){
+        log.info("添加购物车，cart: {}", cart);
+        return cartService.addCart(request, cart);
+    }
 
     // 获取购物车
     @GetMapping("/cart/{userId}")
