@@ -29,4 +29,12 @@ public class CartServiceImpl implements CartService {
         log.info("更新成功");
         return Result.success(200, "数量已更新");
     }
+
+    @Override
+    public Result deleteCart(Integer id) {
+        log.info("删除购物车商品");
+        cartMapper.deleteCart(id);
+        log.info("删除成功");
+        return Result.success(200, "删除成功");
+    }
 }

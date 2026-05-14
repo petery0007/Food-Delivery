@@ -7,4 +7,6 @@ public interface CartService {
     Result getCart(Integer userId);
 
     Result updateCart(Integer id, Integer quantity);
+
+    Result deleteCart(Integer id);
 }

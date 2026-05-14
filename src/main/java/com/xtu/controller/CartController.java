@@ -30,7 +30,7 @@ public class CartController {
     // 删除购物车商品
     @PutMapping("/cart/{id}")
     public Result deleteCart(Integer id){
-        return null;//cartService.deleteCart(id);
+        return cartService.deleteCart(id);
     }
 
     //提交订单
