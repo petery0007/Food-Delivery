@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Mapper
 public interface UserMapper {
@@ -24,4 +25,6 @@ public interface UserMapper {
     void updatePasswordById(User dto);
     @Update("update user set money = money + #{amount} where id = #{id}")
     void updateUserMoney(Integer id, BigDecimal amount);
+    @Select("select * from user WHERE role = 'user' limit #{offset},#{pageSize}")
+    List<User> selectAllUserByPage(Integer offset, Integer pageSize);
 }

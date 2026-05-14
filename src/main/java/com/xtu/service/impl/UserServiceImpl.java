@@ -194,4 +194,16 @@ public class UserServiceImpl implements UserService {
 
         return Result.success(200, "获取成功", data);
     }
+
+    @Override
+    public Result getAllUser(Integer page, Integer pageSize) {
+        log.info("获取用户列表，页码: {}, 每页数量: {}", page);
+        Integer offset = (page - 1) * pageSize;
+        List<User> users = userMapper.selectAllUserByPage(offset, pageSize);
+        Integer total = users.size();
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", users);
+        data.put("total", total);
+        return Result.success(200, "获取成功", data);
+    }
 }

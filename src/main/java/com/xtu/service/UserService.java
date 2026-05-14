@@ -26,4 +26,6 @@ public interface UserService {
     Result getAllProducts(Integer page, Integer pageSize);
 
     Result getProductsByKeywordsAndSpecification(Integer page, Integer pageSize, ProductInfo productInfo);
+
+    Result getAllUser(Integer page, Integer pageSize);
 }
