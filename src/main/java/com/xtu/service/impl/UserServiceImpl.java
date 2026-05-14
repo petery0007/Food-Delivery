@@ -266,4 +266,16 @@ public class UserServiceImpl implements UserService {
 
         return Result.success(200, "获取成功", data);
     }
+
+    @Override
+    public Result getAllPeisong(Integer page, Integer pageSize) {
+        log.info("获取配送员列表，页码: {}, 每页数量: {}", page);
+        Integer offset = (page - 1) * pageSize;
+        List<User> peisong = userMapper.selectAllPeisongByPage(offset, pageSize);
+        Integer total = peisong.size();
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", peisong);
+        data.put("total", total);
+        return Result.success(200, "获取成功", data);
+    }
 }

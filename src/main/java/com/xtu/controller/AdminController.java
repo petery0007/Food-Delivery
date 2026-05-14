@@ -71,4 +71,19 @@ public class AdminController {
                                                         @ModelAttribute UserInfo2 userInfo2){
         return userService.getUsersByKeywords(page, pageSize, userInfo2);
     }
+
+    // 获取所有用户分页
+    @GetMapping("/peisong")
+    public Result getAllPeisong(@RequestParam(defaultValue = "1") Integer page,
+                              @RequestParam(defaultValue = "10") Integer pageSize) {
+        return userService.getAllPeisong(page, pageSize);
+    }
+
+    // 搜索用户列表
+    @GetMapping("/peisong/list")
+    public Result getPeisongByKeywords(@RequestParam(defaultValue = "1") Integer page,
+                                     @RequestParam(defaultValue = "10") Integer pageSize,
+                                     @ModelAttribute UserInfo2 userInfo2){
+        return null;
+    }
 }

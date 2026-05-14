@@ -27,4 +27,6 @@ public interface UserService {
     Result getAllUser(Integer page, Integer pageSize);
 
     Result getUsersByKeywords(Integer page, Integer pageSize, UserInfo2 userInfo2);
+
+    Result getAllPeisong(Integer page, Integer pageSize);
 }
