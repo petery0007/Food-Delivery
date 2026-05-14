@@ -35,4 +35,10 @@ public interface UserMapper {
     List<User> selectUserByUsernameAndPhone(int offset, Integer pageSize, String username, String phone);
     @Select("select * from user WHERE role = 'PEISONG' limit #{offset},#{pageSize}")
     List<User> selectAllPeisongByPage(Integer offset, Integer pageSize);
+    @Select("select * from user WHERE role = 'PEISONG' and phone like '%${phone}%' limit #{offset},#{pageSize}")
+    List<User> selectPeisongByPhone(int offset, Integer pageSize, String phone);
+    @Select("select * from user WHERE role = 'PEISONG' and username like '%${username}%' limit #{offset},#{pageSize}")
+    List<User> selectPeisongByUsername(int offset, Integer pageSize, String username);
+    @Select("select * from user WHERE role = 'PEISONG' and username like '%${username}%' and phone like '%${phone}%' limit #{offset},#{pageSize}")
+    List<User> selectPeisongByUsernameAndPhone(int offset, Integer pageSize, String username, String phone);
 }
