@@ -25,16 +25,31 @@ const routes = [
                 name: 'ProductList',
                 component: () => import('../views/ProductList.vue') // 你上一步写的商品列表！
             },
+            // 新增商品详情页(管理端）
+             {
+                 path: 'product-info/:id',
+                 name: 'ProductInfo',
+                 component: () => import('../views/ProductInfo.vue'),
+                 props: true
+             },
             // 新增个人中心
             {
                 path: 'profile',
                 name: 'Profile',
                 component: () => import('../views/Profile.vue')
             },
+            // 新增用户端浏览商品界面
             {
                 path: 'shop',
                 name: 'Shop',
                 component: () => import('../views/ProductBrow.vue')
+            },
+            // 新增品详情界面（用户端）
+            {
+                path: 'product-info-user/:id',
+                name: 'ProductInfoUser',
+                component: () => import('../views/ProductInfo.vue'),
+                props: true
             }
         ]
     }

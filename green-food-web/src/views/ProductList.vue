@@ -44,7 +44,7 @@
         <el-table-column label="操作" align="center" width="250">
           <template slot-scope="scope">
             <el-button size="mini" type="info" @click="toggleProductStatus(scope.row)">上下架</el-button>
-            <el-button size="mini" type="primary">详情</el-button>
+            <el-button size="mini" type="primary" @click="viewInfo(scope.row.id)">详情</el-button>
             <el-button size="mini" type="danger" @click="deleteProduct(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
@@ -283,6 +283,16 @@ export default {
       this.addForm.status = '上架';
       this.addForm.description = '';
       this.addForm.producer = '';
+    },
+
+    // 商品详情界面跳转
+    viewInfo(productId){
+      this.$router.push({
+        name: 'ProductInfo',
+        params: {
+          id: productId
+        }
+      });
     }
 
     // ================= 【新增方法结束】 =================
