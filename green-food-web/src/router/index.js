@@ -44,6 +44,11 @@ const routes = [
                 name: 'Shop',
                 component: () => import('../views/ProductBrow.vue')
             },
+            {
+                path: 'delivery-staff',
+                name: 'DriverMage',
+                component: () => import('../views/DriverMage.vue')
+            },
             // 新增品详情界面（用户端）
             {
                 path: 'product-info-user/:id',
