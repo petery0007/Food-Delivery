@@ -68,6 +68,13 @@ const routes = [
                 name: 'ShoppingCart',
                 component: () => import('../views/ShoppingCart.vue')
             },
+            // 新增用户端订单界面
+            {
+                path: 'order-confirm',
+                name: 'OrderConfirm',
+                component: () => import('../views/Order.vue'),
+                props: true
+            },
         ]
     }
 ]

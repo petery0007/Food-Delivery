@@ -174,6 +174,64 @@ export default {
       }
     },
 
+    //  加载模拟购物车数据
+    // loadMockCartData() {
+    //   console.log('使用模拟购物车数据')
+    //   this.cartList = [
+    //     {
+    //       id: 1,
+    //       productId: 1,
+    //       productName: '番茄',
+    //       imageUrl: 'https://img95.699pic.com/photo/60078/6274.jpg_wh860.jpg',
+    //       specification: '新鲜蔬菜',
+    //       price: 3.50,
+    //       quantity: 2,
+    //       stock: 200
+    //     },
+    //     {
+    //       id: 2,
+    //       productId: 7,
+    //       productName: '苹果',
+    //       imageUrl: 'https://ts3.tc.mm.bing.net/th/id/OIP-C.18eTzGdFYOKXzH9os8_myQHaE7?rs=1&pid=ImgDetMain',
+    //       specification: '新鲜水果',
+    //       price: 4.50,
+    //       quantity: 3,
+    //       stock: 300
+    //     },
+    //     {
+    //       id: 3,
+    //       productId: 3,
+    //       productName: '黄瓜',
+    //       imageUrl: 'https://ts1.tc.mm.bing.net/th/id/OIP-C.alLlZG8QXvwGtA3r-on33wHaFQ?rs=1&pid=ImgDetMain',
+    //       specification: '新鲜蔬菜',
+    //       price: 3.00,
+    //       quantity: 1,
+    //       stock: 180
+    //     },
+    //     {
+    //       id: 4,
+    //       productId: 9,
+    //       productName: '草莓',
+    //       imageUrl: 'https://img95.699pic.com/photo/50472/6070.jpg_wh860.jpg',
+    //       specification: '新鲜水果',
+    //       price: 15.00,
+    //       quantity: 2,
+    //       stock: 60
+    //     },
+    //     {
+    //       id: 5,
+    //       productId: 24,
+    //       productName: '有机西兰花',
+    //       imageUrl: 'https://tse3-mm.cn.bing.net/th/id/OIP-C.CD7tFLbqezUtiyFX-7swqAHaE7?rs=1&pid=ImgDetMain',
+    //       specification: '有机蔬菜',
+    //       price: 8.00,
+    //       quantity: 1,
+    //       stock: 100
+    //     }
+    //   ]
+    //   this.$message.info('已加载模拟购物车数据')
+    // },
+
     // 查看商品详情
     viewProductInfo(productId) {
       this.$router.push({
@@ -238,46 +296,15 @@ export default {
         this.$message.warning('请至少选择一件商品')
         return
       }
-
-      this.$confirm(
-          `共 ${this.selectedItems.length} 件商品，合计 ¥${this.totalPrice.toFixed(2)}，确认结算？`,
-          '确认订单',
-          {
-            confirmButtonText: '确认结算',
-            cancelButtonText: '继续购物',
-            type: 'success'
+      // 跳转到订单确认页面，传递选中的商品数据
+      this.$router.push({
+        name: 'OrderConfirm',
+        params: {
+          cartData: {
+            items: this.selectedItems
           }
-      ).then(() => {
-        this.checkoutLoading = true
-
-        // // 这里替换为你的实际结算接口
-        // setTimeout(() => {
-        //   this.checkoutLoading = false
-        //   this.$message.success('订单提交成功！')
-        //
-        //   // 清空已选商品（实际应该从购物车移除）
-        //   const selectedIds = this.selectedItems.map(item => item.id)
-        //   this.cartList = this.cartList.filter(item => !selectedIds.includes(item.id))
-        //   this.selectedItems = []
-        //   this.selectAll = false
-        // }, 1500)
-
-        //订单创建接口
-        request.post('/user/order/create', {
-          userId: this.userId,
-          items: this.selectedItems.map(item => ({
-            productId: item.productId,
-            quantity: item.quantity
-          }))
-        }).then(res => {
-          this.$message.success('订单提交成功')
-          this.loadCartData()
-        }).catch(err => {
-          this.$message.error('订单提交失败')
-        }).finally(() => {
-          this.checkoutLoading = false
-        })
-      }).catch(() => {})
+        }
+      })
     },
 
     // 去购物
