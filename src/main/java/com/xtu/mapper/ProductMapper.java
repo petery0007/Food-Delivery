@@ -64,4 +64,7 @@ public interface ProductMapper {
 
     @Select("SELECT COUNT(*) FROM products WHERE name LIKE CONCAT('%', #{keywords}, '%') AND specification LIKE CONCAT('%', #{specification}, '%') AND status = '上架'")
     Integer countProductsByKeywordsAndSpecificationShangjia(String specification, String keywords);
+
+    @Select("SELECT * FROM products WHERE id = #{id}")
+    Product getProductById(Integer id);
 }

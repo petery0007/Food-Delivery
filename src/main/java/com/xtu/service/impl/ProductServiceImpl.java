@@ -127,4 +127,14 @@ public class ProductServiceImpl implements ProductService {
         productMapper.addProduct(product);
         return Result.success(200, "添加成功");
     }
+
+    @Override
+    public Result getProductById(Integer id) {
+        log.info("获取商品，id: {}", id);
+        Product product = productMapper.getProductById(id);
+        if(product == null){
+            return Result.success(404, "商品不存在");
+        }
+        return Result.success(200, "获取成功", product);
+    }
 }

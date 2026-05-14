@@ -15,4 +15,6 @@ public interface ProductService {
     Result deleteProductById(Integer id);
 
     Result addProduct(Product product);
+
+    Result getProductById(Integer id);
 }
