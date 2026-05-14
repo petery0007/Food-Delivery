@@ -246,16 +246,16 @@ export default {
     // 加入购物车（唯一操作功能）
     addToCart(product) {
       // 这里替换为你的实际购物车接口
-      this.$message.success(`已将【${product.name}】加入购物车`);
+      //this.$message.success(`已将【${product.name}】加入购物车`);
 
-      // 示例：调用真实购物车接口
-      // request.post('/cart/add', { productId: product.id, quantity: 1 })
-      //   .then(() => {
-      //     this.$message.success('加入购物车成功');
-      //   })
-      //   .catch(() => {
-      //     this.$message.error('加入购物车失败，请稍后重试');
-      //   });
+      //示例：调用真实购物车接口
+      request.post('/user/cart/add', { productId: product.id, quantity: 1 })
+        .then(() => {
+          this.$message.success('加入购物车成功');
+        })
+        .catch(() => {
+          this.$message.error('加入购物车失败，请稍后重试');
+        });
     },
 
     // 图片加载失败处理

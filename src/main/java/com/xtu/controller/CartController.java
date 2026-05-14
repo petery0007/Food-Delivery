@@ -25,7 +25,7 @@ public class CartController {
 
     // 获取购物车
     @GetMapping("/cart/{userId}")
-    public Result getCart(Integer userId){
+    public Result getCart(@PathVariable Integer userId){
         return cartService.getCart(userId);
     }
 

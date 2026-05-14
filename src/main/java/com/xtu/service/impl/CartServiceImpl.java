@@ -13,6 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Service
 @Slf4j
 public class CartServiceImpl implements CartService {
@@ -48,8 +52,11 @@ public class CartServiceImpl implements CartService {
     @Override
     public Result getCart(Integer userId) {
         log.info("获取购物车");
-        Cart cart = cartMapper.getCart(userId);
-        return Result.success(200, "获取成功", cart);
+        List<Cart> cartList = cartMapper.getCart(userId);
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", cartList);
+        data.put("total", cartList.size());
+        return Result.success(200, "获取成功", data);
     }
 
     @Override
