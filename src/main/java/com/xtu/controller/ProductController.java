@@ -15,5 +15,10 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @GetMapping("/{id}")
+    public Result getProductById(@PathVariable Integer id) {
+        return productService.getProductById(id);
+    }
+
 
 }
