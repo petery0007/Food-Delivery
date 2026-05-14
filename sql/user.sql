@@ -64,11 +64,11 @@ VALUES ('chenzi', '55524211', '13900000001', '110101199001012233', 'PEISONG', 50
 
 -- 2. 配送员 李雷（余额120.50）
 INSERT INTO `user` (`username`, `password`, `phone`, `id_number`, `role`, `money`, `status`)
-VALUES ('lilei', '123456', '13900000002', '310101199506067788', 'PEISONG', 120.50, '配送中');
+VALUES ('lilei', '123456', '13900000002', '310101199506067788', 'PEISONG', 120.50, '空闲');
 
 -- 3. 配送员 韩梅梅（无身份证号，余额80）
 INSERT INTO `user` (`username`, `password`, `phone`, `role`, `money`, `status`)
-VALUES ('hanmeimei', '123456', '13900000003', 'PEISONG', 80.00, '配送中');
+VALUES ('hanmeimei', '123456', '13900000003', 'PEISONG', 80.00, '空闲');
 
 -- 4. 配送员 张伟（余额300.25）
 INSERT INTO `user` (`username`, `password`, `phone`, `id_number`, `role`, `money`, `status`)
@@ -76,7 +76,7 @@ VALUES ('zhangwei', '123456', '13900000004', '440101199809098877', 'PEISONG', 30
 
 -- 5. 配送员 刘芳（余额180）
 INSERT INTO `user` (`username`, `password`, `phone`, `id_number`, `role`, `money`, `status`)
-VALUES ('liufang', '123456', '13900000005', '510101200001015544', 'PEISONG', 180.00, '配送中');
+VALUES ('liufang', '123456', '13900000005', '510101200001015544', 'PEISONG', 180.00, '空闲');
 
 -- 6. 配送员 王强（无身份证号，余额50）
 INSERT INTO `user` (`username`, `password`, `phone`, `role`, `money`, `status`)
@@ -88,7 +88,7 @@ VALUES ('chenli', '123456', '13900000007', '120101199204042233', 'PEISONG', 420.
 
 -- 8. 配送员 杨明（无身份证号，余额95.30）
 INSERT INTO `user` (`username`, `password`, `phone`, `role`, `money`, `status`)
-VALUES ('yangming', '123456', '13900000008', 'PEISONG', 95.30, '配送中');
+VALUES ('yangming', '123456', '13900000008', 'PEISONG', 95.30, '空闲');
 
 -- 9. 配送员 黄俊（余额0）
 INSERT INTO `user` (`username`, `password`, `phone`, `id_number`, `role`, `money`, `status`)
@@ -96,4 +96,4 @@ VALUES ('huangjun', '123456', '13900000009', '610101199910107788', 'PEISONG', 0.
 
 -- 10. 配送员 吴浩（余额280）
 INSERT INTO `user` (`username`, `password`, `phone`, `id_number`, `role`, `money`, `status`)
-VALUES ('wuhao', '123456', '13900000010', '320101199708082233', 'PEISONG', 280.00, '配送中');
+VALUES ('wuhao', '123456', '13900000010', '320101199708082233', 'PEISONG', 280.00, '空闲');

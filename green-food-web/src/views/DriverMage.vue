@@ -21,14 +21,11 @@
         <el-table-column type="index" label="序号" width="60" align="center"></el-table-column>
         <el-table-column prop="username" label="配送员姓名" align="center"></el-table-column>
         <el-table-column prop="phone" label="联系电话" align="center"></el-table-column>
-        <el-table-column prop="role" label="角色" align="center">
+        <el-table-column prop="status" label="配送状态" align="center" width="150">
           <template slot-scope="scope">
-            <el-tag type="warning">{{ scope.row.role }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="money" label="账户余额" align="center">
-          <template slot-scope="scope">
-            <span style="color: #f56c6c; font-weight: bold;">¥{{ scope.row.money }}</span>
+            <el-tag :type="scope.row.status === '空闲' ? 'success' : 'warning'">
+              {{ scope.row.status || '未设置' }}
+            </el-tag>
           </template>
         </el-table-column>
       </el-table>
