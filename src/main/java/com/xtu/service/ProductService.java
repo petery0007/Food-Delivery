@@ -2,6 +2,7 @@ package com.xtu.service;
 
 import com.xtu.pojo.Product;
 import com.xtu.pojo.ProductInfo;
+import com.xtu.pojo.UserInfo2;
 import com.xtu.utils.Result;
 
 public interface ProductService {

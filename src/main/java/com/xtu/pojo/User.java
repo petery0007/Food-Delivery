@@ -18,4 +18,6 @@ public class User {
     private String idNumber;//身份证号码
     private String role;// 身份
     private BigDecimal money; // 新增余额字段
+
+    private String status;//配送员状态
 }

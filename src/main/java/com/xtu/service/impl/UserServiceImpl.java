@@ -194,4 +194,148 @@ public class UserServiceImpl implements UserService {
 
         return Result.success(200, "获取成功", data);
     }
+
+    @Override
+    public Result getAllUser(Integer page, Integer pageSize) {
+        log.info("获取用户列表，页码: {}, 每页数量: {}", page);
+        Integer offset = (page - 1) * pageSize;
+        List<User> users = userMapper.selectAllUserByPage(offset, pageSize);
+        Integer total = users.size();
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", users);
+        data.put("total", total);
+        return Result.success(200, "获取成功", data);
+    }
+
+    @Override
+    public Result getUsersByKeywords(Integer page, Integer pageSize, UserInfo2 userInfo2) {
+        log.info("获取用户列表，页码: {}, 每页数量: {}", page, pageSize);
+
+        if (page == null || page < 1) {
+            page = 1;
+        }
+        if (pageSize == null || pageSize < 1 || pageSize > 100) {
+            pageSize = 10;
+        }
+
+        int offset = (page - 1) * pageSize;
+
+        if(userInfo2 == null){
+            List<User> users = userMapper.selectAllUserByPage(offset, pageSize);
+            Integer total = users.size();
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", users);
+            data.put("total", total);
+
+            return Result.success(200, "获取成功", data);
+        }
+        else if(userInfo2.getUsername() == null){
+            List<User> users = userMapper.selectUserByPhone(offset, pageSize, userInfo2.getPhone());
+            int total = users.size();
+            if(total == 0){
+                return Result.error(401, "查询用户不存在");
+            }
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", users);
+            data.put("total", total);
+            return Result.success(200, "获取成功", data);
+        }
+        else if (userInfo2.getPhone() == null) {
+            List<User> users = userMapper.selectUserByUsername(offset, pageSize, userInfo2.getUsername());
+            int total = users.size();
+            if(total == 0){
+                return Result.error(401, "查询用户不存在");
+            }
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", users);
+            data.put("total", total);
+            return Result.success(200, "获取成功", data);
+
+        }
+
+
+        List<User> users = userMapper.selectUserByUsernameAndPhone(offset, pageSize, userInfo2.getUsername(), userInfo2.getPhone());
+        int total = users.size();
+        if(total == 0){
+            return Result.error(401, "查询用户不存在");
+        }
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", users);
+        data.put("total", total);
+
+        return Result.success(200, "获取成功", data);
+    }
+
+    @Override
+    public Result getAllPeisong(Integer page, Integer pageSize) {
+        log.info("获取配送员列表，页码: {}, 每页数量: {}", page);
+        Integer offset = (page - 1) * pageSize;
+        List<User> peisong = userMapper.selectAllPeisongByPage(offset, pageSize);
+        Integer total = peisong.size();
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", peisong);
+        data.put("total", total);
+        return Result.success(200, "获取成功", data);
+    }
+
+    @Override
+    public Result getPeisongByKeywords(Integer page, Integer pageSize, UserInfo2 userInfo2) {
+        log.info("获取用户列表，页码: {}, 每页数量: {}", page, pageSize);
+
+        if (page == null || page < 1) {
+            page = 1;
+        }
+        if (pageSize == null || pageSize < 1 || pageSize > 100) {
+            pageSize = 10;
+        }
+
+        int offset = (page - 1) * pageSize;
+
+        if(userInfo2 == null){
+            List<User> peisong = userMapper.selectAllPeisongByPage(offset, pageSize);
+            Integer total = peisong.size();
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", peisong);
+            data.put("total", total);
+
+            return Result.success(200, "获取成功", data);
+        }
+        else if(userInfo2.getUsername() == null){
+            List<User> peisong = userMapper.selectPeisongByPhone(offset, pageSize, userInfo2.getPhone());
+            int total = peisong.size();
+            if(total == 0){
+                return Result.error(401, "查询用户不存在");
+            }
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", peisong);
+            data.put("total", total);
+            return Result.success(200, "获取成功", data);
+        }
+        else if (userInfo2.getPhone() == null) {
+            List<User> peisong = userMapper.selectPeisongByUsername(offset, pageSize, userInfo2.getUsername());
+            int total = peisong.size();
+            if(total == 0){
+                return Result.error(401, "查询用户不存在");
+            }
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", peisong);
+            data.put("total", total);
+            return Result.success(200, "获取成功", data);
+
+        }
+
+
+        List<User> peisong = userMapper.selectPeisongByUsernameAndPhone(offset, pageSize, userInfo2.getUsername(), userInfo2.getPhone());
+        int total = peisong.size();
+        if(total == 0){
+            return Result.error(401, "查询用户不存在");
+        }
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", peisong);
+        data.put("total", total);
+
+        return Result.success(200, "获取成功", data);
+    }
 }
