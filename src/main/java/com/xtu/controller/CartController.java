@@ -5,10 +5,7 @@ import com.xtu.utils.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -26,13 +23,19 @@ public class CartController {
 
     // 更新购物车商品
     @PutMapping("/cart/update")
-    public Result updateCart(Integer productId, Integer quantity){
-        return null;//cartService.updateCart(productId, quantity);
+    public Result updateCart(Integer id, Integer quantity){
+        return cartService.updateCart(id, quantity);
     }
 
     // 删除购物车商品
     @PutMapping("/cart/{id}")
     public Result deleteCart(Integer id){
         return null;//cartService.deleteCart(id);
+    }
+
+    //提交订单
+    @PostMapping("/order/create")
+    public Result createOrder(HttpServletRequest request){
+        return null;//cartService.createOrder(request);
     }
 }

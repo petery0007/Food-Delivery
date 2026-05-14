@@ -21,4 +21,12 @@ public class CartServiceImpl implements CartService {
         Cart cart = cartMapper.getCart(userId);
         return Result.success(200, "获取成功", cart);
     }
+
+    @Override
+    public Result updateCart(Integer id, Integer quantity) {
+        log.info("更新购物车商品");
+        cartMapper.updateCart(id, quantity);
+        log.info("更新成功");
+        return Result.success(200, "数量已更新");
+    }
 }

@@ -5,4 +5,6 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public interface CartService {
     Result getCart(Integer userId);
+
+    Result updateCart(Integer id, Integer quantity);
 }
