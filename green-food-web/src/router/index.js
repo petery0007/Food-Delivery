@@ -49,6 +49,12 @@ const routes = [
                 name: 'DriverMage',
                 component: () => import('../views/DriverMage.vue')
             },
+            // 用户信息管理（管理员）
+            {
+                path: 'users',
+                name: 'UserManagement',
+                component: () => import('../views/UserManagement.vue')
+            },
             // 新增品详情界面（用户端）
             {
                 path: 'product-info-user/:id',
