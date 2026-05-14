@@ -206,4 +206,64 @@ public class UserServiceImpl implements UserService {
         data.put("total", total);
         return Result.success(200, "获取成功", data);
     }
+
+    @Override
+    public Result getUsersByKeywords(Integer page, Integer pageSize, UserInfo2 userInfo2) {
+        log.info("获取用户列表，页码: {}, 每页数量: {}", page, pageSize);
+
+        if (page == null || page < 1) {
+            page = 1;
+        }
+        if (pageSize == null || pageSize < 1 || pageSize > 100) {
+            pageSize = 10;
+        }
+
+        int offset = (page - 1) * pageSize;
+
+        if(userInfo2 == null){
+            List<User> users = userMapper.selectAllUserByPage(offset, pageSize);
+            Integer total = users.size();
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", users);
+            data.put("total", total);
+
+            return Result.success(200, "获取成功", data);
+        }
+        else if(userInfo2.getUsername() == null){
+            List<User> users = userMapper.selectUserByPhone(offset, pageSize, userInfo2.getPhone());
+            int total = users.size();
+            if(total == 0){
+                return Result.error(401, "查询商品不存在");
+            }
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", users);
+            data.put("total", total);
+            return Result.success(200, "获取成功", data);
+        }
+        else if (userInfo2.getPhone() == null) {
+            List<User> users = userMapper.selectUserByUsername(offset, pageSize, userInfo2.getUsername());
+            int total = users.size();
+            if(total == 0){
+                return Result.error(401, "查询商品不存在");
+            }
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", users);
+            data.put("total", total);
+            return Result.success(200, "获取成功", data);
+
+        }
+
+
+        List<User> users = userMapper.selectUserByUsernameAndPhone(offset, pageSize, userInfo2.getUsername(), userInfo2.getPhone());
+        int total = users.size();
+        if(total == 0){
+            return Result.error(401, "查询商品不存在");
+        }
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", users);
+        data.put("total", total);
+
+        return Result.success(200, "获取成功", data);
+    }
 }

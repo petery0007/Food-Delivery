@@ -1,9 +1,6 @@
 package com.xtu.service;
 
-import com.xtu.pojo.PasswordUpdateRequest;
-import com.xtu.pojo.ProductInfo;
-import com.xtu.pojo.User;
-import com.xtu.pojo.UserInfoVO;
+import com.xtu.pojo.*;
 import com.xtu.utils.Result;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -28,4 +25,6 @@ public interface UserService {
     Result getProductsByKeywordsAndSpecification(Integer page, Integer pageSize, ProductInfo productInfo);
 
     Result getAllUser(Integer page, Integer pageSize);
+
+    Result getUsersByKeywords(Integer page, Integer pageSize, UserInfo2 userInfo2);
 }

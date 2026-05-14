@@ -3,6 +3,7 @@ package com.xtu.service.impl;
 import com.xtu.mapper.ProductMapper;
 import com.xtu.pojo.Product;
 import com.xtu.pojo.ProductInfo;
+import com.xtu.pojo.UserInfo2;
 import com.xtu.service.ProductService;
 import com.xtu.utils.Result;
 import lombok.extern.slf4j.Slf4j;

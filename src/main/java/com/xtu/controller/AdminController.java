@@ -3,6 +3,7 @@ package com.xtu.controller;
 import com.xtu.pojo.Product;
 import com.xtu.pojo.ProductInfo;
 import com.xtu.pojo.ProductStatusRequest;
+import com.xtu.pojo.UserInfo2;
 import com.xtu.service.ProductService;
 import com.xtu.service.UserService;
 import com.xtu.utils.Result;
@@ -61,5 +62,13 @@ public class AdminController {
     public Result getAllUsers(@RequestParam(defaultValue = "1") Integer page,
                               @RequestParam(defaultValue = "10") Integer pageSize) {
         return userService.getAllUser(page, pageSize);
+    }
+
+    // 搜索用户列表
+    @GetMapping("/user/list")
+    public Result getusersByKeywords(@RequestParam(defaultValue = "1") Integer page,
+                                                        @RequestParam(defaultValue = "10") Integer pageSize,
+                                                        @ModelAttribute UserInfo2 userInfo2){
+        return userService.getUsersByKeywords(page, pageSize, userInfo2);
     }
 }

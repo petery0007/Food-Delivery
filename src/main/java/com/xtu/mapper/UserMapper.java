@@ -27,4 +27,10 @@ public interface UserMapper {
     void updateUserMoney(Integer id, BigDecimal amount);
     @Select("select * from user WHERE role = 'user' limit #{offset},#{pageSize}")
     List<User> selectAllUserByPage(Integer offset, Integer pageSize);
+    @Select("select * from user WHERE role = 'user' and phone like '%${phone}%' limit #{offset},#{pageSize}")
+    List<User> selectUserByPhone(int offset, Integer pageSize, String phone);
+    @Select("select * from user WHERE role = 'user' and username like '%${username}%' limit #{offset},#{pageSize}")
+    List<User> selectUserByUsername(int offset, Integer pageSize, String username);
+    @Select("select * from user WHERE role = 'user' and username like '%${username}%' and phone like '%${phone}%' limit #{offset},#{pageSize}")
+    List<User> selectUserByUsernameAndPhone(int offset, Integer pageSize, String username, String phone);
 }
