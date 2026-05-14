@@ -220,7 +220,7 @@ export default {
         specification: ''
       };
       this.currentPage = 1;
-      this.loadProductList();
+      this.loadProductList(this.currentPage, this.pageSize, 'create_time', this.queryParams.keywords, this.queryParams.specification);
     },
 
     // 分页切换
