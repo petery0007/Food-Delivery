@@ -149,20 +149,16 @@
       </el-col>
     </el-row>
 
-    <!-- 充值弹窗组件 --->
-    <RechargeModal ref="rechargeModal" @success="handleRechargeSuccess" />
+
   </div>
 </template>
 
 <script>
 import request from '@/utils/request'
-import RechargeModal from '@/components/Recharge.vue'
 
 export default {
   name: 'OrderConfirm',
-  components: {
-    RechargeModal
-  },
+  components: {},
   data() {
     const validatePhone = (rule, value, callback) => {
       if (!value) {
@@ -214,10 +210,7 @@ export default {
       // 提交状态
       submitLoading: false,
 
-      userId: null,
-
-      // 是否等待充值完成
-      waitingForRecharge: false
+      userId: null
     }
   },
   computed: {
@@ -315,31 +308,11 @@ export default {
           return
         }
 
-        // 检查余额
-        if (this.paymentType === 'balance' && this.userBalance < this.finalTotal) {
-          this.$confirm(
-              `您的余额不足，当前余额：¥${this.userBalance.toFixed(2)}，应付总额：¥${this.finalTotal.toFixed(2)}。是否立即充值？`,
-              '余额不足',
-              {
-                confirmButtonText: '立即充值',
-                cancelButtonText: '取消',
-                type: 'warning'
-              }
-          ).then(() => {
-            // 标记为等待充值状态
-            this.waitingForRecharge = true
-            // 打开充值弹窗
-            this.$refs.rechargeModal.open()
-          }).catch(() => {
-            // 用户取消充值
-          })
-          return
-        }
-
         this.submitLoading = true
 
         try {
           // 构建订单数据
+
           const orderData = {
             userId: this.userId,
             receiver: this.addressForm.receiver,
@@ -417,19 +390,7 @@ export default {
    //     })
    //   }, 1500)
    // },
-    //处理充值成功事件
-    handleRechargeSuccess(){
-      //重新加载用户余额
-      this.loadUserInfo()
 
-      // 如果之前是因为余额不足而等待充值，充值成功后自动重新提交订单
-      if(this.waitingForRecharge) {
-        this.waitingForRecharge = false
-        setTimeout(() => {
-          this.submitOrder()
-        }, 500)
-      }
-    },
 
     // 返回购物车
     goBackToCart() {

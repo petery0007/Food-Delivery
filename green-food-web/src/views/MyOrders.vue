@@ -114,14 +114,21 @@
         </div>
       </div>
     </el-card>
+
+    <!-- 充值弹窗组件 -->
+    <RechargeModal ref="rechargeModal" @success="handleRechargeSuccess" />
   </div>
 </template>
 
 <script>
 import request from '@/utils/request'
+import RechargeModal from '@/components/Recharge.vue'
 
 export default {
   name: 'MyOrders',
+  components: {
+    RechargeModal
+  },
   data() {
     return {
       activeTab: 'all',
@@ -130,7 +137,9 @@ export default {
       userId: null,
       currentPage: 1,
       pageSize: 10,
-      total: 0
+      total: 0,
+      userBalance: 0,
+      currentPayOrder: null
     }
   },
   computed: {
@@ -155,9 +164,21 @@ export default {
       this.$router.push('/login')
       return
     }
+    this.loadUserInfo()
     this.loadOrders()
   },
   methods: {
+    async loadUserInfo() {
+      try {
+        const res = await request.get('/user/info')
+        if (res.data) {
+          this.userBalance = res.data.money || 0
+        }
+      } catch (error) {
+        console.error('加载用户信息失败:', error)
+      }
+    },
+
     async loadOrders() {
       this.loading = true
       try {
@@ -607,20 +628,74 @@ export default {
     },
 
     handlePay(order) {
-      this.$confirm(`确认支付订单 ${order.orderNo}，金额 ¥${order.totalAmount.toFixed(2)}？`, '支付确认', {
-        confirmButtonText: '确认支付',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(async () => {
-        try {
-          await request.post(`/user/order/pay/${order.id}`)
-          this.$message.success('支付成功')
-          this.loadOrders()
-        } catch (error) {
+      // 保存当前要支付的订单
+      this.currentPayOrder = order
+      
+      // 检查余额是否足够
+      if (this.userBalance < order.totalAmount) {
+        this.$confirm(
+            `您的余额不足，当前余额：¥${this.userBalance.toFixed(2)}，应付金额：¥${order.totalAmount.toFixed(2)}。是否立即充值？`,
+            '余额不足',
+            {
+              confirmButtonText: '立即充值',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }
+        ).then(() => {
+          // 打开充值弹窗
+          this.$refs.rechargeModal.open()
+        }).catch(() => {
+          // 用户取消充值
+        })
+        return
+      }
+
+      // 余额充足，直接支付
+      this.confirmPay(order)
+    },
+
+    // 确认支付
+    async confirmPay(order) {
+      try {
+        await this.$confirm(`确认支付订单 ${order.orderNo}，金额 ¥${order.totalAmount.toFixed(2)}？`, '支付确认', {
+          confirmButtonText: '确认支付',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        
+        await request.post(`/user/order/pay/${order.id}`)
+        this.$message.success('支付成功')
+        
+        // 重新加载用户余额和订单列表
+        await this.loadUserInfo()
+        await this.loadOrders()
+      } catch (error) {
+        if (error !== 'cancel') {
           console.error('支付失败:', error)
           this.$message.error('支付失败，请稍后重试')
         }
-      }).catch(() => {})
+      }
+    },
+
+    // 处理充值成功事件
+    handleRechargeSuccess() {
+      // 重新加载用户余额
+      this.loadUserInfo()
+
+      // 如果之前有等待支付的订单，充值成功后自动继续支付
+      if (this.currentPayOrder) {
+        const order = this.currentPayOrder
+        this.currentPayOrder = null
+        
+        // 检查充值后余额是否足够
+        if (this.userBalance >= order.totalAmount) {
+          setTimeout(() => {
+            this.confirmPay(order)
+          }, 500)
+        } else {
+          this.$message.warning('充值后余额仍不足，请继续充值或选择其他支付方式')
+        }
+      }
     },
 
     handleCancel(order) {
