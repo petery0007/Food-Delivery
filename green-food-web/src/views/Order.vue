@@ -248,26 +248,26 @@ export default {
     this.calculateDeliveryFee()
   },
   methods: {
-    // 加载用户信息
-    //async loadUserInfo() {
-      //try {
-        //const res = await request.get('/user/info')
-        ///if (res.data) {
-          //this.userBalance = res.data.money || 0
+     //加载用户信息
+    async loadUserInfo() {
+      try {
+        const res = await request.get('/user/info')
+        if (res.data) {
+          this.userBalance = res.data.money || 0
 
-          // 自动填充用户信息
-          //if (!this.addressForm.receiver) {
-           // this.addressForm.receiver = res.data.username || ''
-         // }
-          //if (!this.addressForm.phone) {
-            //this.addressForm.phone = res.data.phone || ''
-         // }
-        //}
-     // } catch (error) {
-        //console.error('加载用户信息失败:', error)
+          自动填充用户信息
+          if (!this.addressForm.receiver) {
+           this.addressForm.receiver = res.data.username || ''
+         }
+          if (!this.addressForm.phone) {
+            this.addressForm.phone = res.data.phone || ''
+         }
+        }
+     } catch (error) {
+        console.error('加载用户信息失败:', error)
         //this.loadMockUserInfo()
-      //}
-    //},
+      }
+    },
 
     // 加载模拟用户数据
     //loadMockUserInfo() {
