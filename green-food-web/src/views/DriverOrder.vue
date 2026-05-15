@@ -32,7 +32,7 @@
           <!-- 订单头部 -->
           <div class="order-header">
             <div class="order-info">
-              <span class="order-no">订单编号：{{ order.orderNo }}</span>
+              <span class="order-no">订单编号：{{ order.id }}</span>
               <span class="order-time">下单时间：{{ order.createTime }}</span>
             </div>
             <div class="order-status">
@@ -59,8 +59,8 @@
               </el-col>
               <el-col :span="8">
                 <div class="info-item">
-                  <span class="label">配送方式：</span>
-                  <span class="value">{{ order.deliveryType === 'express' ? '快递配送' : '门店自提' }}</span>
+                  <span class="label">支付方式：</span>
+                  <span class="value">{{ order.paymentType === 'balance' ? '余额支付' : '货到付款' }}</span>
                 </div>
               </el-col>
             </el-row>
@@ -115,7 +115,6 @@
               <!-- 配送中状态 -->
               <template v-if="order.status === 1">
                 <el-button size="small" type="success" @click="handleDelivered(order)">确认送达</el-button>
-                <el-button size="small" @click="handleCallCustomer(order)">联系客户</el-button>
               </template>
 
               <!-- 已送达状态 -->

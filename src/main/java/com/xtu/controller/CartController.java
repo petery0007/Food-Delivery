@@ -57,4 +57,11 @@ public class CartController {
         log.info("获取订单列表，页码: {}, 每页数量: {}", page, pageSize);
         return cartService.getOrderList(request, page, pageSize);
     }
+
+    // 支付订单
+    @PostMapping("/order/pay/{orderId}")
+    public Result payOrder(HttpServletRequest request,@PathVariable Integer orderId){
+        log.info("支付订单，订单id: {}", orderId);
+        return cartService.payOrder(request, orderId);
+    }
 }

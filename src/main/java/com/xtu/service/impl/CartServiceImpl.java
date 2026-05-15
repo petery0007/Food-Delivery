@@ -179,35 +179,6 @@ public class CartServiceImpl implements CartService {
                 log.info("✓ 商品 [{}] 库存扣减成功，扣减数量: {}", item.getProductName(), item.getQuantity());
             }
 
-            if ("balance".equals(orderRequest.getPaymentType())) {
-                log.info("使用余额支付，开始验证余额...");
-                Map<String, Object> userInfo = cartMapper.getUserInfo(userId);
-                if (userInfo == null) {
-                    return Result.error(400, "用户信息不存在");
-                }
-
-                BigDecimal balance = (BigDecimal) userInfo.get("money");
-                if (balance == null) {
-                    balance = BigDecimal.ZERO;
-                }
-
-                log.info("用户当前余额: {}, 订单金额: {}", balance, totalAmount);
-
-                if (balance.compareTo(totalAmount) < 0) {
-                    return Result.error(400, "余额不足，当前余额: ¥" + balance
-                            + "，需要: ¥" + totalAmount);
-                }
-
-                int updateMoney = cartMapper.updateUserMoney(userId, totalAmount.negate());
-                if (updateMoney <= 0) {
-                    throw new RuntimeException("余额扣除失败");
-                }
-
-                log.info("✓ 余额支付成功，扣除金额: {}", totalAmount);
-            } else if ("cod".equals(orderRequest.getPaymentType())) {
-                log.info("选择货到付款，无需扣款");
-            }
-
             log.info("========== 订单创建成功 ==========");
             log.info("订单ID: {}", orderId);
             log.info("收货人: {}", orderRequest.getReceiver());
@@ -269,5 +240,50 @@ public class CartServiceImpl implements CartService {
             log.error("获取订单列表失败", e);
             return Result.error(500, "获取订单列表失败: " + e.getMessage());
         }
+    }
+
+    @Override
+    public Result payOrder(HttpServletRequest request, Integer orderId) {
+        try {
+            Order order = orderMapper.getOrderById(orderId);
+            if ("balance".equals(order.getPaymentType())) {
+                log.info("使用余额支付，开始验证余额...");
+                String token = request.getHeader("token");
+                Claims claims = JwtUtils.parseToken(token);
+                Integer userId = (Integer) claims.get("id");
+                Map<String, Object> userInfo = cartMapper.getUserInfo(userId);
+                if (userInfo == null) {
+                    return Result.error(400, "用户信息不存在");
+                }
+
+                BigDecimal balance = (BigDecimal) userInfo.get("money");
+                if (balance == null) {
+                    balance = BigDecimal.ZERO;
+                }
+                BigDecimal totalAmount = order.getTotalAmount();
+                log.info("用户当前余额: {}, 订单金额: {}", balance, order.getTotalAmount());
+
+                if (balance.compareTo(totalAmount) < 0) {
+                    return Result.error(400, "余额不足，当前余额: ¥" + balance
+                            + "，需要: ¥" + totalAmount);
+                }
+
+                int updateMoney = cartMapper.updateUserMoney(userId, totalAmount.negate());
+                if (updateMoney <= 0) {
+                    throw new RuntimeException("余额扣除失败");
+                }
+                orderMapper.updateOrderStatus(orderId, 1);
+                log.info("✓ 余额支付成功，扣除金额: {}", totalAmount);
+                return Result.success(200, "支付成功");
+            } else if ("cod".equals(order.getPaymentType())) {
+                log.info("选择货到付款，无需扣款");
+                orderMapper.updateOrderStatus(orderId, 1);
+                return Result.success(200, "选择货到付款，无需扣款");
+            }
+        } catch (Exception e) {
+            log.error("支付订单失败", e);
+            return Result.error(500, "支付订单失败: " + e.getMessage());
+        }
+        return null;
     }
 }
