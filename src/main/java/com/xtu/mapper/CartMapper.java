@@ -3,7 +3,9 @@ package com.xtu.mapper;
 import com.xtu.pojo.Cart;
 import org.apache.ibatis.annotations.*;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface CartMapper {
@@ -21,4 +23,10 @@ public interface CartMapper {
 
     @Insert("INSERT INTO cart (user_id, product_id, image_url, specification, price, quantity) VALUES (#{userId}, #{productId}, #{imageUrl}, #{specification}, #{price}, #{quantity})")
     void addCart(Cart cart);
+
+    @Select("SELECT money FROM user WHERE id = #{userId}")
+    Map<String, Object> getUserInfo(Integer userId);
+
+    @Update("UPDATE user SET money = money + #{amount} WHERE id = #{userId}")
+    int updateUserMoney(Integer userId, BigDecimal amount);
 }

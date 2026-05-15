@@ -1,6 +1,7 @@
 package com.xtu.controller;
 
 import com.xtu.pojo.Cart;
+import com.xtu.pojo.OrderCreateRequest;
 import com.xtu.service.CartService;
 import com.xtu.utils.Result;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,7 +44,17 @@ public class CartController {
 
     //提交订单
     @PostMapping("/order/create")
-    public Result createOrder(HttpServletRequest request){
-        return null;//cartService.createOrder(request);
+    public Result createOrder(HttpServletRequest request, @RequestBody OrderCreateRequest orderRequest){
+        log.info("创建订单，订单数据: {}", orderRequest);
+        return cartService.createOrder(request, orderRequest);
+    }
+
+    // 获取订单列表
+    @GetMapping("/order/list")
+    public Result getOrderList(HttpServletRequest request,
+                               @RequestParam(defaultValue = "1") Integer page,
+                               @RequestParam(defaultValue = "10") Integer pageSize){
+        log.info("获取订单列表，页码: {}, 每页数量: {}", page, pageSize);
+        return cartService.getOrderList(request, page, pageSize);
     }
 }
