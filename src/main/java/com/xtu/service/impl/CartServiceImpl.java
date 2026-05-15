@@ -304,4 +304,44 @@ public class CartServiceImpl implements CartService {
         }
         return null;
     }
+
+    @Override
+    @Transactional
+    public Result cancelOrder(Integer orderId) {
+        log.info("开始取消订单 {}", orderId);
+
+        Order order = orderMapper.getOrderById(orderId);
+        if (order == null) {
+            return Result.error(404, "订单不存在");
+        }
+
+        if (order.getStatus() != 0 && order.getStatus() != 1) {
+            return Result.error(400, "只能取消待支付或配送中的订单");
+        }
+
+        List<OrderItemEntity> items = orderMapper.getOrderItemsByOrderId(orderId);
+
+
+        // 还原库存
+        for (OrderItemEntity item : items) {
+            productMapper.restoreStock(item.getProductId(), item.getQuantity());
+        }
+
+//        if ("balance".equals(order.getPaymentType())) {
+//            cartMapper.updateUserMoney(order.getUserId(), order.getTotalAmount());
+//            log.info("订单取消，退还余额: {}", order.getTotalAmount());
+//        }
+
+        if (order.getDeliveryStaff() != null && !order.getDeliveryStaff().isEmpty()) {
+            Integer deliveryUserId = Integer.parseInt(order.getDeliveryStaff());
+            userMapper.updateDeliveryStatus(deliveryUserId, "空闲");
+            log.info("订单取消，释放配送员: {}", deliveryUserId);
+        }
+
+        orderMapper.cancelOrder(orderId, 4, LocalDateTime.now());
+
+        log.info("订单 {} 取消成功", orderId);
+
+        return Result.success(200, "订单已取消");
+    }
 }

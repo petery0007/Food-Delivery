@@ -64,4 +64,10 @@ public class CartController {
         log.info("支付订单，订单id: {}", orderId);
         return cartService.payOrder(request, orderId);
     }
+
+    // 取消订单
+    @PutMapping("/order/cancel/{orderId}")
+    public Result cancelOrder(@PathVariable Integer orderId){
+        return cartService.cancelOrder(orderId);
+    }
 }

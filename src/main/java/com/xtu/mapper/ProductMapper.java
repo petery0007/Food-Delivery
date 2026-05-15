@@ -70,4 +70,7 @@ public interface ProductMapper {
 
     @Update("UPDATE products SET stock = stock - #{quantity} WHERE id = #{productId} AND stock >= #{quantity}")
     int updateStock(Integer productId, Integer quantity);
+
+    @Update("UPDATE products SET stock = stock + #{quantity} WHERE id = #{productId}")
+    int restoreStock(Integer productId, Integer quantity);
 }

@@ -53,4 +53,8 @@ public interface OrderMapper {
     //获取订单总数
     @Select("SELECT COUNT(*) FROM orders WHERE user_id = #{userId}")
     Integer countOrdersByUserId(Integer userId);
+
+    //取消订单
+    @Update("UPDATE orders SET status = #{status}, finish_time = #{finishTime} WHERE id = #{id}")
+    int cancelOrder(Integer id, Integer status, LocalDateTime finishTime);
 }
