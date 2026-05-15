@@ -70,4 +70,10 @@ public class CartController {
     public Result cancelOrder(@PathVariable Integer orderId){
         return cartService.cancelOrder(orderId);
     }
+
+    // 删除订单
+    @DeleteMapping("/order/delete/{orderId}")
+    public Result deleteOrder(@PathVariable Integer orderId){
+        return cartService.deleteOrder(orderId);
+    }
 }

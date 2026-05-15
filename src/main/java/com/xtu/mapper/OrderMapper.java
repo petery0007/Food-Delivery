@@ -57,4 +57,11 @@ public interface OrderMapper {
     //取消订单
     @Update("UPDATE orders SET status = #{status}, finish_time = #{finishTime} WHERE id = #{id}")
     int cancelOrder(Integer id, Integer status, LocalDateTime finishTime);
+
+    //删除订单
+    @Delete("DELETE FROM order_items WHERE order_id = #{orderId}")
+    int deleteOrderItems(Integer orderId);
+
+    @Delete("DELETE FROM orders WHERE id = #{id}")
+    int deleteOrder(Integer id);
 }

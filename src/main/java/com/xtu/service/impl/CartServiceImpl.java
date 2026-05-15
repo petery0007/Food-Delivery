@@ -344,4 +344,27 @@ public class CartServiceImpl implements CartService {
 
         return Result.success(200, "订单已取消");
     }
+
+    @Override
+    @Transactional
+    public Result deleteOrder(Integer orderId) {
+        log.info("开始删除订单 {}", orderId);
+
+        Order order = orderMapper.getOrderById(orderId);
+        if (order == null) {
+            return Result.error(404, "订单不存在");
+        }
+
+        if (order.getStatus() != 3 && order.getStatus() != 4) {
+            return Result.error(400, "只能删除已完成或已取消的订单");
+        }
+
+        orderMapper.deleteOrderItems(orderId);
+
+        orderMapper.deleteOrder(orderId);
+
+        log.info("订单 {} 删除成功", orderId);
+
+        return Result.success(200, "订单已删除");
+    }
 }

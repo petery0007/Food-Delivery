@@ -21,4 +21,6 @@ public interface CartService {
     Result payOrder(HttpServletRequest request, Integer orderId);
 
     Result cancelOrder(Integer orderId);
+
+    Result deleteOrder(Integer orderId);
 }
