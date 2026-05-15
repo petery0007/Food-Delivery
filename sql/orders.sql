@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS orders
     status        INT          NOT NULL DEFAULT 0 COMMENT '订单状态：0-待支付，1-配送中，2-待收货，3-已完成，4-已取消',
     create_time   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '下单时间',
     finish_time   DATETIME     NULL COMMENT '完成时间',
-    peisong_id    VARCHAR(50)  NULL COMMENT '配送员ID',
+    delivery_staff    VARCHAR(50)  NULL COMMENT '配送员姓名',
     INDEX idx_user_id (user_id),
     INDEX idx_create_time (create_time),
     INDEX idx_status (status)
@@ -46,64 +46,64 @@ CREATE TABLE IF NOT EXISTS order_items
 -- ==================== 订单主表数据 ====================
 
 -- 用户 zhangsan (userId=2) 的订单 - 已完成订单（余额支付）
-INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, peisong_id) VALUES
-(2, '张三', '13800000002', '北京市朝阳区建国路100号XX小区3号楼502室', 'express', 'balance', '请轻拿轻放', 59.80, 0.00, 59.80, 3, '2026-05-10 10:30:00', '2026-05-12 14:20:00', 'chenzi');
+INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, delivery_staff) VALUES
+(2, '张三', '13800000002', '北京市朝阳区建国路100号XX小区3号楼502室', 'express', 'balance', '请轻拿轻放', 59.80, 0.00, 59.80, 3, '2026-05-10 10:30:00', '2026-05-12 14:20:00', '陈紫凡');
 
--- 用户 zhangsan (userId=2) 的订单 - 配送中订单（货到付款）
-INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, peisong_id) VALUES
-    (2, '张三', '13800000002', '北京市朝阳区建国路100号XX小区3号楼502室', 'express', 'cod', '尽快送达', 125.50, 8.00, 133.50, 1, '2026-05-14 15:20:00', NULL, 'lilei');
+-- 用户 zhangsan (userId=2) 的订单 - 已完成订单（货到付款）
+INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, delivery_staff) VALUES
+    (2, '张三', '13800000002', '北京市朝阳区建国路100号XX小区3号楼502室', 'express', 'cod', '尽快送达', 125.50, 8.00, 133.50, 3, '2026-05-14 15:20:00', NULL, '李伟健');
 
 -- 用户 lisi (userId=3) 的订单 - 待收货订单（余额支付）
-INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, peisong_id) VALUES
-    (3, '李四', '13800000003', '上海市浦东新区世纪大道200号YY花园8栋1201室', 'express', 'balance', '', 45.00, 8.00, 53.00, 2, '2026-05-13 09:15:00', NULL, 'hanmeimei');
+INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, delivery_staff) VALUES
+    (3, '李四', '13800000003', '上海市浦东新区世纪大道200号YY花园8栋1201室', 'express', 'balance', '', 45.00, 8.00, 53.00, 2, '2026-05-13 09:15:00', NULL, '韩梅梅');
 
--- 用户 wangwu (userId=4) 的订单 - 待支付订单（余额支付）
-INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, peisong_id) VALUES
-    (4, '王五', '13800000004', '广州市天河区天河路300号ZZ大厦15层', 'express', 'balance', '周末配送', 88.00, 0.00, 88.00, 0, '2026-05-15 08:00:00', NULL, NULL);
+-- 用户 wangwu (userId=4) 的订单 - 已取消订单（余额支付）
+INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, delivery_staff) VALUES
+    (4, '王五', '13800000004', '广州市天河区天河路300号ZZ大厦15层', 'express', 'balance', '周末配送', 88.00, 0.00, 88.00, 4, '2026-05-15 08:00:00', '2026-05-15 12:00:00', NULL);
 
 -- 用户 wangwu (userId=4) 的订单 - 已完成订单（货到付款）
-INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, peisong_id) VALUES
-    (4, '王五', '13800000004', '广州市天河区天河路300号ZZ大厦15层', 'express', 'cod', '', 35.00, 8.00, 43.00, 3, '2026-05-08 14:30:00', '2026-05-10 16:45:00', 'zhangwei');
+INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, delivery_staff) VALUES
+    (4, '王五', '13800000004', '广州市天河区天河路300号ZZ大厦15层', 'express', 'cod', '', 35.00, 8.00, 43.00, 3, '2026-05-08 14:30:00', '2026-05-10 16:45:00', '张伟');
 
--- 用户 zhaoliu (userId=5) 的订单 - 已完成订单（余额支付）
-INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, peisong_id) VALUES
-    (5, '赵六', '13800000005', '深圳市南山区科技园南路500号AA科技园B座', 'self', 'balance', '自提', 156.00, 0.00, 156.00, 3, '2026-05-11 11:00:00', '2026-05-11 18:30:00', NULL);
+-- 用户 zhaoliu (userId=5) 的订单 - 已取消订单（余额支付）
+INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, delivery_staff) VALUES
+    (5, '赵六', '13800000005', '深圳市南山区科技园南路500号AA科技园B座', 'self', 'balance', '自提', 156.00, 0.00, 156.00, 4, '2026-05-11 11:00:00', '2026-05-11 18:30:00', NULL);
 
 -- 用户 zhaoliu (userId=5) 的订单 - 已取消订单
-INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, peisong_id) VALUES
+INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, delivery_staff) VALUES
     (5, '赵六', '13800000005', '深圳市南山区科技园南路500号AA科技园B座', 'express', 'balance', '地址填错了', 72.50, 8.00, 80.50, 4, '2026-05-12 16:45:00', '2026-05-12 17:00:00', NULL);
 
--- 用户 sunqi (userId=6) 的订单 - 配送中订单（余额支付）
-INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, peisong_id) VALUES
-    (6, '孙七', '13800000006', '杭州市西湖区文三路400号BB小区6栋301室', 'express', 'balance', '放快递柜', 210.00, 0.00, 210.00, 1, '2026-05-14 13:20:00', NULL, 'liufang');
+-- 用户 sunqi (userId=6) 的订单 - 已完成订单（余额支付）
+INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, delivery_staff) VALUES
+    (6, '孙七', '13800000006', '杭州市西湖区文三路400号BB小区6栋301室', 'express', 'balance', '放快递柜', 210.00, 0.00, 210.00, 3, '2026-05-14 13:20:00', NULL, '福哥');
 
 -- 用户 zhouba (userId=7) 的订单 - 待收货订单（货到付款）
-INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, peisong_id) VALUES
-    (7, '周八', '13800000007', '成都市武侯区人民南路600号CC广场', 'express', 'cod', '电话联系', 95.00, 0.00, 95.00, 2, '2026-05-13 17:30:00', NULL, 'wangqiang');
+INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, delivery_staff) VALUES
+    (7, '周八', '13800000007', '成都市武侯区人民南路600号CC广场', 'express', 'cod', '电话联系', 95.00, 0.00, 95.00, 2, '2026-05-13 17:30:00', NULL, '王强');
 
--- 用户 zhouba (userId=7) 的订单 - 已完成订单（余额支付）
-INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, peisong_id) VALUES
-    (7, '周八', '13800000007', '成都市武侯区人民南路600号CC广场', 'self', 'balance', '自提', 48.00, 0.00, 48.00, 3, '2026-05-09 10:00:00', '2026-05-09 19:00:00', NULL);
+-- 用户 zhouba (userId=7) 的订单 - 已取消订单（余额支付）
+INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, delivery_staff) VALUES
+    (7, '周八', '13800000007', '成都市武侯区人民南路600号CC广场', 'self', 'balance', '自提', 48.00, 0.00, 48.00, 4, '2026-05-09 10:00:00', '2026-05-09 19:00:00', NULL);
 
--- 用户 wujiu (userId=8) 的订单 - 待支付订单（货到付款）
-INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, peisong_id) VALUES
-    (8, '吴九', '13800000008', '南京市鼓楼区中山北路700号DD大厦', 'express', 'cod', '', 67.00, 8.00, 75.00, 0, '2026-05-15 09:30:00', NULL, NULL);
+-- 用户 wujiu (userId=8) 的订单 - 已取消订单（货到付款）
+INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, delivery_staff) VALUES
+    (8, '吴九', '13800000008', '南京市鼓楼区中山北路700号DD大厦', 'express', 'cod', '', 67.00, 8.00, 75.00, 4, '2026-05-15 09:30:00', '2026-05-15 12:00:00', NULL);
 
 -- 用户 zhengshi (userId=9) 的订单 - 已完成订单（余额支付）
-INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, peisong_id) VALUES
-    (9, '郑十', '13800000009', '武汉市江汉区解放大道800号EE小区', 'express', 'balance', '谢谢', 180.00, 0.00, 180.00, 3, '2026-05-07 12:00:00', '2026-05-09 15:30:00', 'chenli');
+INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, delivery_staff) VALUES
+    (9, '郑十', '13800000009', '武汉市江汉区解放大道800号EE小区', 'express', 'balance', '谢谢', 180.00, 0.00, 180.00, 3, '2026-05-07 12:00:00', '2026-05-09 15:30:00', '陈丽');
 
--- 用户 qianbai (userId=10) 的订单 - 配送中订单（货到付款）
-INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, peisong_id) VALUES
-    (10, '钱百', '13800000010', '西安市雁塔区长安南路900号FF花园', 'express', 'cod', '小心易碎', 320.00, 0.00, 320.00, 1, '2026-05-14 16:00:00', NULL, 'yangming');
+-- 用户 qianbai (userId=10) 的订单 - 已完成订单（货到付款）
+INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, delivery_staff) VALUES
+    (10, '钱百', '13800000010', '西安市雁塔区长安南路900号FF花园', 'express', 'cod', '小心易碎', 320.00, 0.00, 320.00, 3, '2026-05-14 16:00:00', NULL, '杨明');
 
 -- 用户 admin (userId=1) 的订单 - 已完成订单（余额支付）
-INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, peisong_id) VALUES
-    (1, '管理员', '13800000001', '北京市海淀区中关村大街1号', 'express', 'balance', '测试订单', 25.00, 8.00, 33.00, 3, '2026-05-06 10:00:00', '2026-05-07 14:00:00', 'huangjun');
+INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, delivery_staff) VALUES
+    (1, '管理员', '13800000001', '北京市海淀区中关村大街1号', 'express', 'balance', '测试订单', 25.00, 8.00, 33.00, 3, '2026-05-06 10:00:00', '2026-05-07 14:00:00', '黄俊');
 
--- 用户 zhangsan (userId=2) 的订单 - 待支付订单（余额支付）
-INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, peisong_id) VALUES
-    (2, '张三', '13800000002', '北京市朝阳区建国路100号XX小区3号楼502室', 'express', 'balance', '', 42.00, 8.00, 50.00, 0, '2026-05-15 10:00:00', NULL, NULL);
+-- 用户 zhangsan (userId=2) 的订单 - 已取消订单（余额支付）
+INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_type, remark, goods_total, delivery_fee, total_amount, status, create_time, finish_time, delivery_staff) VALUES
+    (2, '张三', '13800000002', '北京市朝阳区建国路100号XX小区3号楼502室', 'express', 'balance', '', 42.00, 8.00, 50.00, 4, '2026-05-15 10:00:00', '2026-05-15 12:00:00', NULL);
 
 
 -- ==================== 订单明细表数据 ====================
@@ -126,7 +126,7 @@ INSERT INTO order_items (order_id, product_id, product_name, price, quantity, sp
 
 -- 订单3 (orderId=3) 的明细 - 土豆 x 5, 洋葱 x 3
 INSERT INTO order_items (order_id, product_id, product_name, price, quantity, specification, image_url, subtotal) VALUES
-                                                                                                                      (3, 11, '土豆', 1.80, 5, '新鲜蔬菜', 'https://img95.699pic.com/photo/60058/5980.jpg_wh860.jpg', 9.00),
+                                                                                                                      (3, 11, '土豆', 1.80, 5, '新鲜蔬菜', 'https://img95.699pic.com/photo/50118/3081.jpg_wh860.jpg', 9.00),
                                                                                                                       (3, 40, '洋葱', 2.50, 3, '新鲜蔬菜', 'https://img95.699pic.com/photo/60064/9302.jpg_wh860.jpg', 7.50),
                                                                                                                       (3, 41, '大蒜', 8.00, 2, '新鲜蔬菜', 'https://cdn.pixabay.com/photo/2017/02/25/13/24/garlic-2097759_1280.jpg', 16.00),
                                                                                                                       (3, 42, '生姜', 9.50, 1, '新鲜蔬菜', 'https://img95.699pic.com/photo/60053/5206.jpg_wh860.jpg', 9.50),
@@ -184,7 +184,7 @@ INSERT INTO order_items (order_id, product_id, product_name, price, quantity, sp
 -- 订单10 (orderId=10) 的明细 - 白菜 x 5, 土豆 x 10
 INSERT INTO order_items (order_id, product_id, product_name, price, quantity, specification, image_url, subtotal) VALUES
                                                                                                                       (10, 21, '白菜', 2.20, 5, '新鲜蔬菜', 'https://img95.699pic.com/photo/60021/3201.jpg_wh860.jpg', 11.00),
-                                                                                                                      (10, 11, '土豆', 1.80, 10, '新鲜蔬菜', 'https://img95.699pic.com/photo/60058/5980.jpg_wh860.jpg', 18.00),
+                                                                                                                      (10, 11, '土豆', 1.80, 10, '新鲜蔬菜', 'https://img95.699pic.com/photo/50118/3081.jpg_wh860.jpg', 18.00),
                                                                                                                       (10, 3, '黄瓜', 3.00, 3, '新鲜蔬菜', 'https://ts1.tc.mm.bing.net/th/id/OIP-C.alLlZG8QXvwGtA3r-on33wHaFQ?rs=1&pid=ImgDetMain', 9.00),
                                                                                                                       (10, 1, '番茄', 3.50, 2, '新鲜蔬菜', 'https://img95.699pic.com/photo/60078/6274.jpg_wh860.jpg', 7.00),
                                                                                                                       (10, 42, '生姜', 9.50, 1, '新鲜蔬菜', 'https://img95.699pic.com/photo/60053/5206.jpg_wh860.jpg', 9.50);
@@ -223,6 +223,6 @@ INSERT INTO order_items (order_id, product_id, product_name, price, quantity, sp
 INSERT INTO order_items (order_id, product_id, product_name, price, quantity, specification, image_url, subtotal) VALUES
                                                                                                                       (15, 7, '苹果', 4.50, 4, '新鲜水果', 'https://ts3.tc.mm.bing.net/th/id/OIP-C.18eTzGdFYOKXzH9os8_myQHaE7?rs=1&pid=ImgDetMain', 18.00),
                                                                                                                       (15, 8, '香蕉', 3.80, 3, '新鲜水果', 'https://imgs.699pic.com/images/505/395/907.jpg!detail.v1', 11.40),
-                                                                                                                      (15, 11, '土豆', 1.80, 5, '新鲜蔬菜', 'https://img95.699pic.com/photo/60058/5980.jpg_wh860.jpg', 9.00),
+                                                                                                                      (15, 11, '土豆', 1.80, 5, '新鲜蔬菜', 'https://img95.699pic.com/photo/50118/3081.jpg_wh860.jpg', 9.00),
                                                                                                                       (15, 14, '新鲜玉米', 4.00, 1, '新鲜蔬菜', 'https://img95.699pic.com/photo/60037/4532.jpg_wh860.jpg', 4.00);
 
