@@ -17,4 +17,6 @@ public interface CartService {
     Result createOrder(HttpServletRequest request, OrderCreateRequest orderRequest);
 
     Result getOrderList(HttpServletRequest request, Integer page, Integer pageSize);
+
+    Result payOrder(HttpServletRequest request, Integer orderId);
 }

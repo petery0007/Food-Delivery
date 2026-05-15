@@ -112,7 +112,7 @@ INSERT INTO orders (user_id, receiver, phone, address, delivery_type, payment_ty
 INSERT INTO order_items (order_id, product_id, product_name, price, quantity, specification, image_url, subtotal) VALUES
                                                                                                                       (1, 1, '番茄', 3.50, 2, '新鲜蔬菜', 'https://img95.699pic.com/photo/60078/6274.jpg_wh860.jpg', 7.00),
                                                                                                                       (1, 3, '黄瓜', 3.00, 1, '新鲜蔬菜', 'https://ts1.tc.mm.bing.net/th/id/OIP-C.alLlZG8QXvwGtA3r-on33wHaFQ?rs=1&pid=ImgDetMain', 3.00),
-                                                                                                                      (1, 21, '白菜', 2.20, 5, '新鲜蔬菜', 'https://pic.nximg.cn/file/20230512/29159477_145610945101_2.jpg', 11.00),
+                                                                                                                      (1, 21, '白菜', 2.20, 5, '新鲜蔬菜', 'https://img95.699pic.com/photo/60021/3201.jpg_wh860.jpg', 11.00),
                                                                                                                       (1, 7, '苹果', 4.50, 8, '新鲜水果', 'https://ts3.tc.mm.bing.net/th/id/OIP-C.18eTzGdFYOKXzH9os8_myQHaE7?rs=1&pid=ImgDetMain', 36.00),
                                                                                                                       (1, 2, '生菜', 2.80, 1, '新鲜蔬菜', 'https://tse1-mm.cn.bing.net/th/id/OIP-C.j2OALSUDcnMgInX8hW0ITQHaE7?rs=1&pid=ImgDetMain', 2.80);
 
@@ -121,20 +121,20 @@ INSERT INTO order_items (order_id, product_id, product_name, price, quantity, sp
                                                                                                                       (2, 9, '草莓', 15.00, 2, '新鲜水果', 'https://img95.699pic.com/photo/50472/6070.jpg_wh860.jpg', 30.00),
                                                                                                                       (2, 53, '樱桃', 35.00, 1, '新鲜水果', 'https://img95.699pic.com/photo/60073/3550.jpg_wh860.jpg', 35.00),
                                                                                                                       (2, 54, '蓝莓', 25.00, 1, '新鲜水果', 'https://img95.699pic.com/photo/60022/8913.jpg_wh860.jpg', 25.00),
-                                                                                                                      (2, 8, '香蕉', 3.80, 5, '新鲜水果', 'https://img95.699pic.com/photo/60016/9981.jpg_wh300.jpg!/fh/300/quality/90', 19.00),
+                                                                                                                      (2, 8, '香蕉', 3.80, 5, '新鲜水果', 'https://imgs.699pic.com/images/505/395/907.jpg!detail.v1', 19.00),
                                                                                                                       (2, 14, '新鲜玉米', 4.00, 4, '新鲜蔬菜', 'https://img95.699pic.com/photo/60037/4532.jpg_wh860.jpg', 16.00);
 
 -- 订单3 (orderId=3) 的明细 - 土豆 x 5, 洋葱 x 3
 INSERT INTO order_items (order_id, product_id, product_name, price, quantity, specification, image_url, subtotal) VALUES
                                                                                                                       (3, 11, '土豆', 1.80, 5, '新鲜蔬菜', 'https://img95.699pic.com/photo/60058/5980.jpg_wh860.jpg', 9.00),
-                                                                                                                      (3, 40, '洋葱', 2.50, 3, '新鲜蔬菜', 'https://pic.nximg.cn/file/20230816/33760392_144119130126_2.jpg', 7.50),
+                                                                                                                      (3, 40, '洋葱', 2.50, 3, '新鲜蔬菜', 'https://img95.699pic.com/photo/60064/9302.jpg_wh860.jpg', 7.50),
                                                                                                                       (3, 41, '大蒜', 8.00, 2, '新鲜蔬菜', 'https://cdn.pixabay.com/photo/2017/02/25/13/24/garlic-2097759_1280.jpg', 16.00),
                                                                                                                       (3, 42, '生姜', 9.50, 1, '新鲜蔬菜', 'https://img95.699pic.com/photo/60053/5206.jpg_wh860.jpg', 9.50),
                                                                                                                       (3, 12, '有机番茄', 7.00, 2, '有机蔬菜', 'https://img95.699pic.com/photo/60058/5981.jpg_wh860.jpg', 14.00);
 
 -- 订单4 (orderId=4) 的明细 - 西瓜 x 2, 橙子 x 3
 INSERT INTO order_items (order_id, product_id, product_name, price, quantity, specification, image_url, subtotal) VALUES
-                                                                                                                      (4, 51, '西瓜', 3.00, 2, '新鲜水果', 'https://pic.nximg.cn/file/20230707/34599220_213359412100_2.jpg', 6.00),
+                                                                                                                      (4, 51, '西瓜', 3.00, 2, '新鲜水果', 'https://img95.699pic.com/photo/60015/4981.jpg_wh300.jpg!/fh/300/quality/90', 6.00),
                                                                                                                       (4, 49, '橙子', 5.50, 3, '新鲜水果', 'https://img95.699pic.com/photo/60063/7761.jpg_wh860.jpg', 16.50),
                                                                                                                       (4, 10, '葡萄', 12.00, 2, '新鲜水果', 'https://img95.699pic.com/photo/60080/6037.jpg_wh860.jpg', 24.00),
                                                                                                                       (4, 50, '梨', 4.00, 3, '新鲜水果', 'https://pic.52112.com/180327/180327_109/pSqG2Yuchm_small.jpg', 12.00),
@@ -159,10 +159,10 @@ INSERT INTO order_items (order_id, product_id, product_name, price, quantity, sp
 
 -- 订单7 (orderId=7) 的明细 - 菠萝 x 2, 猕猴桃 x 1
 INSERT INTO order_items (order_id, product_id, product_name, price, quantity, specification, image_url, subtotal) VALUES
-                                                                                                                      (7, 53, '菠萝', 8.00, 2, '新鲜水果', 'https://pic.nximg.cn/file/20230811/33760392_174457583129_2.jpg', 16.00),
+                                                                                                                      (7, 53, '菠萝', 8.00, 2, '新鲜水果', 'https://img95.699pic.com/photo/60070/4995.jpg_wh860.jpg', 16.00),
                                                                                                                       (7, 54, '猕猴桃', 10.00, 1, '新鲜水果', 'https://img95.699pic.com/photo/50020/2526.jpg_wh860.jpg', 10.00),
                                                                                                                       (7, 7, '苹果', 4.50, 4, '新鲜水果', 'https://ts3.tc.mm.bing.net/th/id/OIP-C.18eTzGdFYOKXzH9os8_myQHaE7?rs=1&pid=ImgDetMain', 18.00),
-                                                                                                                      (7, 8, '香蕉', 3.80, 3, '新鲜水果', 'https://img95.699pic.com/photo/60016/9981.jpg_wh300.jpg!/fh/300/quality/90', 11.40),
+                                                                                                                      (7, 8, '香蕉', 3.80, 3, '新鲜水果', 'https://imgs.699pic.com/images/505/395/907.jpg!detail.v1', 11.40),
                                                                                                                       (7, 50, '梨', 4.00, 4, '新鲜水果', 'https://pic.52112.com/180327/180327_109/pSqG2Yuchm_small.jpg', 16.00);
 
 -- 订单8 (orderId=8) 的明细 - 樱桃 x 3, 蓝莓 x 2, 草莓 x 2
@@ -175,7 +175,7 @@ INSERT INTO order_items (order_id, product_id, product_name, price, quantity, sp
 -- 订单9 (orderId=9) 的明细 - 南瓜 x 3, 丝瓜 x 2, 苦瓜 x 2
 INSERT INTO order_items (order_id, product_id, product_name, price, quantity, specification, image_url, subtotal) VALUES
                                                                                                                       (9, 44, '南瓜', 2.80, 3, '新鲜蔬菜', 'https://img95.699pic.com/photo/60015/5210.jpg_wh860.jpg', 8.40),
-                                                                                                                      (9, 45, '丝瓜', 5.00, 2, '新鲜蔬菜', 'https://img95.699pic.com/photo/50049/8977.jpg_wh860.jpg', 10.00),
+                                                                                                                      (9, 45, '丝瓜', 5.00, 2, '新鲜蔬菜', 'https://img95.699pic.com/photo/50390/6735.jpg_wh860.jpg', 10.00),
                                                                                                                       (9, 46, '苦瓜', 4.50, 2, '新鲜蔬菜', 'https://img95.699pic.com/photo/50120/4895.jpg_wh860.jpg', 9.00),
                                                                                                                       (9, 4, '有机西兰花', 8.00, 3, '有机蔬菜', 'https://tse3-mm.cn.bing.net/th/id/OIP-C.CD7tFLbqezUtiyFX-7swqAHaE7?rs=1&pid=ImgDetMain', 24.00),
                                                                                                                       (9, 5, '有机胡萝卜', 5.50, 4, '有机蔬菜', 'https://img95.699pic.com/photo/50322/5525.jpg_wh860.jpg', 22.00),
@@ -183,7 +183,7 @@ INSERT INTO order_items (order_id, product_id, product_name, price, quantity, sp
 
 -- 订单10 (orderId=10) 的明细 - 白菜 x 5, 土豆 x 10
 INSERT INTO order_items (order_id, product_id, product_name, price, quantity, specification, image_url, subtotal) VALUES
-                                                                                                                      (10, 21, '白菜', 2.20, 5, '新鲜蔬菜', 'https://pic.nximg.cn/file/20230512/29159477_145610945101_2.jpg', 11.00),
+                                                                                                                      (10, 21, '白菜', 2.20, 5, '新鲜蔬菜', 'https://img95.699pic.com/photo/60021/3201.jpg_wh860.jpg', 11.00),
                                                                                                                       (10, 11, '土豆', 1.80, 10, '新鲜蔬菜', 'https://img95.699pic.com/photo/60058/5980.jpg_wh860.jpg', 18.00),
                                                                                                                       (10, 3, '黄瓜', 3.00, 3, '新鲜蔬菜', 'https://ts1.tc.mm.bing.net/th/id/OIP-C.alLlZG8QXvwGtA3r-on33wHaFQ?rs=1&pid=ImgDetMain', 9.00),
                                                                                                                       (10, 1, '番茄', 3.50, 2, '新鲜蔬菜', 'https://img95.699pic.com/photo/60078/6274.jpg_wh860.jpg', 7.00),
@@ -195,15 +195,15 @@ INSERT INTO order_items (order_id, product_id, product_name, price, quantity, sp
                                                                                                                       (11, 42, '生姜', 9.50, 1, '新鲜蔬菜', 'https://img95.699pic.com/photo/60053/5206.jpg_wh860.jpg', 9.50),
                                                                                                                       (11, 38, '芹菜', 3.20, 4, '新鲜蔬菜', 'https://img95.699pic.com/photo/60013/8817.jpg_wh860.jpg', 12.80),
                                                                                                                       (11, 39, '韭菜', 4.00, 3, '新鲜蔬菜', 'https://th.bing.com/th/id/R.181d10634b035dd42f7ca74e7c80971c?rik=r3VTGvZ7FU7fuw&riu=http%3a%2f%2fseopic.699pic.com%2fphoto%2f50049%2f9013.jpg_wh1200.jpg&ehk=v%2be0yA3PmC8eBgdKM4gbbC%2bKSnVBnoyNRX%2fObgzeYmA%3d&risl=&pid=ImgRaw&r=0', 12.00),
-                                                                                                                      (11, 40, '洋葱', 2.50, 6, '新鲜蔬菜', 'https://pic.nximg.cn/file/20230816/33760392_144119130126_2.jpg', 15.00);
+                                                                                                                      (11, 40, '洋葱', 2.50, 6, '新鲜蔬菜', 'https://img95.699pic.com/photo/60064/9302.jpg_wh860.jpg', 15.00);
 
 -- 订单12 (orderId=12) 的明细 - 西瓜 x 5, 橙子 x 4, 桃子 x 3
 INSERT INTO order_items (order_id, product_id, product_name, price, quantity, specification, image_url, subtotal) VALUES
-                                                                                                                      (12, 51, '西瓜', 3.00, 5, '新鲜水果', 'https://pic.nximg.cn/file/20230707/34599220_213359412100_2.jpg', 15.00),
+                                                                                                                      (12, 51, '西瓜', 3.00, 5, '新鲜水果', 'https://img95.699pic.com/photo/60015/4981.jpg_wh300.jpg!/fh/300/quality/90', 15.00),
                                                                                                                       (12, 49, '橙子', 5.50, 4, '新鲜水果', 'https://img95.699pic.com/photo/60063/7761.jpg_wh860.jpg', 22.00),
                                                                                                                       (12, 13, '桃子', 9.00, 3, '新鲜水果', 'https://img95.699pic.com/photo/50407/6632.jpg_wh300.jpg!/fh/300/quality/90', 27.00),
                                                                                                                       (12, 52, '芒果', 12.00, 4, '新鲜水果', 'https://img.huabaike.com/tukuimgs/772/20200923133206_118354.jpg', 48.00),
-                                                                                                                      (12, 53, '菠萝', 8.00, 5, '新鲜水果', 'https://pic.nximg.cn/file/20230811/33760392_174457583129_2.jpg', 40.00),
+                                                                                                                      (12, 53, '菠萝', 8.00, 5, '新鲜水果', 'https://img95.699pic.com/photo/60070/4995.jpg_wh860.jpg', 40.00),
                                                                                                                       (12, 54, '猕猴桃', 10.00, 3, '新鲜水果', 'https://img95.699pic.com/photo/50020/2526.jpg_wh860.jpg', 30.00);
 
 -- 订单13 (orderId=13) 的明细 - 樱桃 x 5, 蓝莓 x 3
@@ -222,7 +222,7 @@ INSERT INTO order_items (order_id, product_id, product_name, price, quantity, sp
 -- 订单15 (orderId=15) 的明细 - 苹果 x 4, 香蕉 x 3
 INSERT INTO order_items (order_id, product_id, product_name, price, quantity, specification, image_url, subtotal) VALUES
                                                                                                                       (15, 7, '苹果', 4.50, 4, '新鲜水果', 'https://ts3.tc.mm.bing.net/th/id/OIP-C.18eTzGdFYOKXzH9os8_myQHaE7?rs=1&pid=ImgDetMain', 18.00),
-                                                                                                                      (15, 8, '香蕉', 3.80, 3, '新鲜水果', 'https://img95.699pic.com/photo/60016/9981.jpg_wh300.jpg!/fh/300/quality/90', 11.40),
+                                                                                                                      (15, 8, '香蕉', 3.80, 3, '新鲜水果', 'https://imgs.699pic.com/images/505/395/907.jpg!detail.v1', 11.40),
                                                                                                                       (15, 11, '土豆', 1.80, 5, '新鲜蔬菜', 'https://img95.699pic.com/photo/60058/5980.jpg_wh860.jpg', 9.00),
                                                                                                                       (15, 14, '新鲜玉米', 4.00, 1, '新鲜蔬菜', 'https://img95.699pic.com/photo/60037/4532.jpg_wh860.jpg', 4.00);
 
