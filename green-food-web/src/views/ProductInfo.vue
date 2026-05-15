@@ -268,7 +268,9 @@ export default {
       // 根据来源页面返回
       if (this.$route.query.from === 'shop') {
         this.$router.push('/layout/shop')
-      } else {
+      } else if (this.$route.query.from === 'cart'){
+        this.$router.push('/layout/cart')
+      }else{
         this.$router.push('/layout/products')
       }
     }
