@@ -148,14 +148,21 @@
         </div>
       </el-col>
     </el-row>
+
+    <!-- 充值弹窗组件 --->
+    <RechargeModal ref="rechargeModal" @success="handleRechargeSuccess" />
   </div>
 </template>
 
 <script>
 import request from '@/utils/request'
+import RechargeModal from '@/components/Recharge.vue'
 
 export default {
   name: 'OrderConfirm',
+  components: {
+    RechargeModal
+  },
   data() {
     const validatePhone = (rule, value, callback) => {
       if (!value) {
@@ -207,7 +214,10 @@ export default {
       // 提交状态
       submitLoading: false,
 
-      userId: null
+      userId: null,
+
+      // 是否等待充值完成
+      waitingForRecharge: false
     }
   },
   computed: {
@@ -249,25 +259,25 @@ export default {
   },
   methods: {
     // 加载用户信息
-    //async loadUserInfo() {
-      //try {
-        //const res = await request.get('/user/info')
-        ///if (res.data) {
-          //this.userBalance = res.data.money || 0
+    async loadUserInfo() {
+      try {
+        const res = await request.get('/user/info')
+        if (res.data) {
+          this.userBalance = res.data.money || 0
 
           // 自动填充用户信息
-          //if (!this.addressForm.receiver) {
-           // this.addressForm.receiver = res.data.username || ''
-         // }
-          //if (!this.addressForm.phone) {
-            //this.addressForm.phone = res.data.phone || ''
-         // }
-        //}
-     // } catch (error) {
-        //console.error('加载用户信息失败:', error)
+          if (!this.addressForm.receiver) {
+           this.addressForm.receiver = res.data.username || ''
+         }
+          if (!this.addressForm.phone) {
+            this.addressForm.phone = res.data.phone || ''
+         }
+        }
+     } catch (error) {
+        console.error('加载用户信息失败:', error)
         //this.loadMockUserInfo()
-      //}
-    //},
+      }
+    },
 
     // 加载模拟用户数据
     //loadMockUserInfo() {
@@ -307,7 +317,22 @@ export default {
 
         // 检查余额
         if (this.paymentType === 'balance' && this.userBalance < this.finalTotal) {
-          this.$message.error('余额不足，请选择其他支付方式或充值')
+          this.$confirm(
+              `您的余额不足，当前余额：¥${this.userBalance.toFixed(2)}，应付总额：¥${this.finalTotal.toFixed(2)}。是否立即充值？`,
+              '余额不足',
+              {
+                confirmButtonText: '立即充值',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }
+          ).then(() => {
+            // 标记为等待充值状态
+            this.waitingForRecharge = true
+            // 打开充值弹窗
+            this.$refs.rechargeModal.open()
+          }).catch(() => {
+            // 用户取消充值
+          })
           return
         }
 
@@ -373,25 +398,39 @@ export default {
         //this.$message.success('订单提交成功！（模拟）')
 
         // 显示订单信息
-        //this.$alert(`
-          //<div style="text-align: left;">
-            //<p><strong>订单编号：</strong>ORD${Date.now()}</p>
-            //<p><strong>收货人：</strong>${this.addressForm.receiver}</p>
-           // <p><strong>联系电话：</strong>${this.addressForm.phone}</p>
-           // <p><strong>收货地址：</strong>${this.addressForm.address}</p>
-           // <p><strong>配送方式：</strong>${this.deliveryType === 'express' ? '快递配送' : '门店自提'}</p>
-           // <p><strong>支付方式：</strong>${this.paymentType === 'balance' ? '余额支付' : '货到付款'}</p>
-            //<p><strong>商品数量：</strong>${this.selectedItems.length} 件</p>
-            //<p><strong>应付金额：</strong><span style="color: #f56c6c; font-size: 18px;">¥${this.finalTotal.toFixed(2)}</span></p>
-          //</div>
-        //`, '订单提交成功', {
-         // dangerouslyUseHTMLString: true,
-         // confirmButtonText: '查看我的订单'
-        //}).then(() => {
-         // this.$router.push('/layout/my-orders')
-       // })
-     // }, 1500)
+   //      this.$alert(`
+   //        <div style="text-align: left;">
+   //          <p><strong>订单编号：</strong>ORD${Date.now()}</p>
+   //          <p><strong>收货人：</strong>${this.addressForm.receiver}</p>
+   //         <p><strong>联系电话：</strong>${this.addressForm.phone}</p>
+   //         <p><strong>收货地址：</strong>${this.addressForm.address}</p>
+   //         <p><strong>配送方式：</strong>${this.deliveryType === 'express' ? '快递配送' : '门店自提'}</p>
+   //         <p><strong>支付方式：</strong>${this.paymentType === 'balance' ? '余额支付' : '货到付款'}</p>
+   //          <p><strong>商品数量：</strong>${this.selectedItems.length} 件</p>
+   //          <p><strong>应付金额：</strong><span style="color: #f56c6c; font-size: 18px;">¥${this.finalTotal.toFixed(2)}</span></p>
+   //        </div>
+   //      `, '订单提交成功', {
+   //       dangerouslyUseHTMLString: true,
+   //       confirmButtonText: '查看我的订单'
+   //      }).then(() => {
+   //       this.$router.push('/layout/my-orders')
+   //     })
+   //   }, 1500)
    // },
+    //处理充值成功事件
+    handleRechargeSuccess(){
+      //重新加载用户余额
+      this.loadUserInfo()
+
+      // 如果之前是因为余额不足而等待充值，充值成功后自动重新提交订单
+      if(this.waitingForRecharge) {
+        this.waitingForRecharge = false
+        setTimeout(() => {
+          this.submitOrder()
+        }, 500)
+      }
+    },
+
     // 返回购物车
     goBackToCart() {
       this.$router.push('/layout/cart')
