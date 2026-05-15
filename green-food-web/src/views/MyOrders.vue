@@ -35,7 +35,7 @@
           <!-- 订单头部 -->
           <div class="order-header">
             <div class="order-info">
-              <span class="order-no">订单编号：{{ order.orderNo }}</span>
+              <span class="order-no">订单编号：{{ order.id }}</span>
               <span class="order-time">{{ order.createTime }}</span>
               <span class="order-time" v-if="order.finishTime">完成时间：{{ order.finishTime }}</span>
               <span class="order-time" v-if="order.deliveryStaff">配送员：{{ order.deliveryStaff }} {{ order.deliveryPhone ? '(' + order.deliveryPhone + ')' : '' }}</span>
@@ -169,17 +169,17 @@ export default {
 
         const res = await request.get(url)
 
-        if (res.data && res.data.list) {
+        if (res && res.data && res.data.list) {
           this.orderList = res.data.list
           this.total = res.data.total || 0
         } else {
           this.orderList = []
           this.total = 0
         }
-        this.loading = false
       } catch (error) {
-        console.error('加载订单失败:', error)
+        console.error('加载订单失败，使用模拟数据:', error)
         this.loadMockOrders()
+      } finally {
         this.loading = false
       }
     },
