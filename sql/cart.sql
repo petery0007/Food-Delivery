@@ -4,6 +4,7 @@ CREATE TABLE cart
         PRIMARY KEY,
     user_id       INT          NOT NULL COMMENT '用户ID',
     product_id    INT          NOT NULL COMMENT '商品ID',
+    product_name  VARCHAR(100) NULL COMMENT '商品名称',
     image_url     VARCHAR(255) NULL COMMENT '商品图片URL',
     specification VARCHAR(20)  NULL COMMENT '商品规格',
     price         DECIMAL(10, 2) NOT NULL COMMENT '商品单价',
