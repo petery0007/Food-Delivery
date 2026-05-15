@@ -75,6 +75,18 @@ const routes = [
                 component: () => import('../views/Order.vue'),
                 props: true
             },
+            // 新增用户端我的订单管理
+            {
+                path: 'my-orders',
+                name: 'MyOrders',
+                component: () => import('../views/MyOrders.vue')
+            },
+            // 新增配送员端配送订单界面
+            {
+                path: 'delivery-tasks',
+                name: 'DeliveryTasks',
+                component: () => import('../views/DriverOrder.vue')
+            },
         ]
     }
 ]

@@ -40,16 +40,17 @@ public class CartServiceImpl implements CartService {
         Integer id = (Integer) claims.get("id");
         int check = cartMapper.check(id, cart.getProductId());
         if(check != 0){
-            return Result.error(401, "商品已存在,请前往购物车添加");
+            return Result.error(400, "商品已存在,请前往购物车添加");
         }
         cart.setUserId(id);
         Product p = productMapper.getProductById(cart.getProductId());
         if(p.getStock() < cart.getQuantity()){
-            return Result.error(401, "库存不足");
+            return Result.error(400, "库存不足");
         }
         cart.setPrice(p.getPrice());
         cart.setImageUrl(p.getImageUrl());
         cart.setSpecification(p.getSpecification());
+        cart.setProductName(p.getName());
         cartMapper.addCart(cart);
         return Result.success(200, "加入购物车成功");
     }

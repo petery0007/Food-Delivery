@@ -21,7 +21,7 @@ public interface CartMapper {
     @Select("SELECT count(*) FROM cart WHERE user_id = #{id} AND product_id = #{productId}")
     int check(Integer id, Integer productId);
 
-    @Insert("INSERT INTO cart (user_id, product_id, image_url, specification, price, quantity) VALUES (#{userId}, #{productId}, #{imageUrl}, #{specification}, #{price}, #{quantity})")
+    @Insert("INSERT INTO cart (user_id, product_id, product_name, image_url, specification, price, quantity) VALUES (#{userId}, #{productId}, #{productName}, #{imageUrl}, #{specification}, #{price}, #{quantity})")
     void addCart(Cart cart);
 
     @Select("SELECT money FROM user WHERE id = #{userId}")

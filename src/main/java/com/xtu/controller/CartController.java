@@ -37,8 +37,8 @@ public class CartController {
     }
 
     // 删除购物车商品
-    @PutMapping("/cart/{id}")
-    public Result deleteCart(Integer id){
+    @DeleteMapping("/cart/{id}")
+    public Result deleteCart(@PathVariable Integer id){
         return cartService.deleteCart(id);
     }
 
