@@ -41,4 +41,8 @@ public interface UserMapper {
     List<User> selectPeisongByUsername(int offset, Integer pageSize, String username);
     @Select("select * from user WHERE role = 'PEISONG' and username like '%${username}%' and phone like '%${phone}%' limit #{offset},#{pageSize}")
     List<User> selectPeisongByUsernameAndPhone(int offset, Integer pageSize, String username, String phone);
+    @Select("SELECT * FROM user WHERE role = 'PEISONG' AND status = '空闲'")
+    List<User> selectIdleDeliveryUsers();
+    @Update("UPDATE user SET status = #{status} WHERE id = #{id}")
+    int updateDeliveryStatus(Integer id, String status);
 }

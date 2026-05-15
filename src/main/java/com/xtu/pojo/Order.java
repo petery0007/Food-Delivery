@@ -21,7 +21,7 @@ public class Order {
     private Integer status;// 订单状态 0:待支付 1:配送中 2:待收货 3:已完成 4:已取消
     private LocalDateTime createTime;// 创建时间
     private LocalDateTime finishTime;// 完成时间
-    private String peisongId;// 配送ID
+    private String deliveryStaff;// 配送员
 
 
     private List<OrderItemEntity> items;

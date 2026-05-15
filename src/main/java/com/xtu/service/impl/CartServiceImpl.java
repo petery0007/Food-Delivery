@@ -3,6 +3,7 @@ package com.xtu.service.impl;
 import com.xtu.mapper.CartMapper;
 import com.xtu.mapper.OrderMapper;
 import com.xtu.mapper.ProductMapper;
+import com.xtu.mapper.UserMapper;
 import com.xtu.pojo.*;
 import com.xtu.service.CartService;
 import com.xtu.utils.JwtUtils;
@@ -22,6 +23,9 @@ import java.util.*;
 @Service
 @Slf4j
 public class CartServiceImpl implements CartService {
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Autowired
     private CartMapper cartMapper;
@@ -140,8 +144,22 @@ public class CartServiceImpl implements CartService {
             order.setGoodsTotal(orderRequest.getGoodsTotal());
             order.setDeliveryFee(orderRequest.getDeliveryFee());
             order.setTotalAmount(totalAmount);
-            order.setStatus(0);
             order.setCreateTime(LocalDateTime.now());
+
+            List<User> idleDeliveryUsers = userMapper.selectIdleDeliveryUsers();
+            if (idleDeliveryUsers == null || idleDeliveryUsers.isEmpty()) {
+                return Result.error(400, "当前没有空闲的配送员");
+            }
+
+            Random random = new Random();
+            User selectedDelivery = idleDeliveryUsers.get(random.nextInt(idleDeliveryUsers.size()));
+
+            userMapper.updateDeliveryStatus(selectedDelivery.getId(), "配送中");
+
+            order.setStatus(1);
+            order.setDeliveryStaff(selectedDelivery.getUsername());
+
+            log.info("订单 {} 分配配送员成功: {}", order.getId(), selectedDelivery.getUsername());
 
             int insertOrderResult = orderMapper.insertOrder(order);
             if (insertOrderResult <= 0) {
