@@ -29,4 +29,8 @@ public interface CartMapper {
 
     @Update("UPDATE user SET money = money + #{amount} WHERE id = #{userId}")
     int updateUserMoney(Integer userId, BigDecimal amount);
+
+    @Delete("DELETE FROM cart WHERE user_id = #{userId} AND product_id = #{productId}")
+    int deleteCartItemByUserIdAndProductId(Integer userId, Integer productId);
+
 }

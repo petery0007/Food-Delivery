@@ -144,22 +144,8 @@ public class CartServiceImpl implements CartService {
             order.setGoodsTotal(orderRequest.getGoodsTotal());
             order.setDeliveryFee(orderRequest.getDeliveryFee());
             order.setTotalAmount(totalAmount);
+            order.setStatus(0);
             order.setCreateTime(LocalDateTime.now());
-
-            List<User> idleDeliveryUsers = userMapper.selectIdleDeliveryUsers();
-            if (idleDeliveryUsers == null || idleDeliveryUsers.isEmpty()) {
-                return Result.error(400, "当前没有空闲的配送员");
-            }
-
-            Random random = new Random();
-            User selectedDelivery = idleDeliveryUsers.get(random.nextInt(idleDeliveryUsers.size()));
-
-            userMapper.updateDeliveryStatus(selectedDelivery.getId(), "配送中");
-
-            order.setStatus(1);
-            order.setDeliveryStaff(selectedDelivery.getUsername());
-
-            log.info("订单 {} 分配配送员成功: {}", order.getId(), selectedDelivery.getUsername());
 
             int insertOrderResult = orderMapper.insertOrder(order);
             if (insertOrderResult <= 0) {
@@ -197,6 +183,41 @@ public class CartServiceImpl implements CartService {
                 log.info("✓ 商品 [{}] 库存扣减成功，扣减数量: {}", item.getProductName(), item.getQuantity());
             }
 
+            if ("balance".equals(orderRequest.getPaymentType())) {
+                log.info("使用余额支付，开始验证余额...");
+                Map<String, Object> userInfo = cartMapper.getUserInfo(userId);
+                if (userInfo == null) {
+                    return Result.error(400, "用户信息不存在");
+                }
+
+                BigDecimal balance = (BigDecimal) userInfo.get("money");
+                if (balance == null) {
+                    balance = BigDecimal.ZERO;
+                }
+
+                log.info("用户当前余额: {}, 订单金额: {}", balance, totalAmount);
+
+                if (balance.compareTo(totalAmount) < 0) {
+                    return Result.error(400, "余额不足，当前余额: ¥" + balance
+                            + "，需要: ¥" + totalAmount);
+                }
+
+                int updateMoney = cartMapper.updateUserMoney(userId, totalAmount.negate());
+                if (updateMoney <= 0) {
+                    throw new RuntimeException("余额扣除失败");
+                }
+
+                log.info("✓ 余额支付成功，扣除金额: {}", totalAmount);
+            } else if ("cod".equals(orderRequest.getPaymentType())) {
+                log.info("选择货到付款，无需扣款");
+            }
+
+            log.info("开始删除购物车中的商品...");
+            for (OrderItem item : items) {
+                cartMapper.deleteCartItemByUserIdAndProductId(userId, item.getProductId());
+                log.info("✓ 删除购物车商品: {}", item.getProductName());
+            }
+
             log.info("========== 订单创建成功 ==========");
             log.info("订单ID: {}", orderId);
             log.info("收货人: {}", orderRequest.getReceiver());
@@ -220,6 +241,7 @@ public class CartServiceImpl implements CartService {
             throw new RuntimeException("订单创建失败: " + e.getMessage());
         }
     }
+
 
     @Override
     public Result getOrderList(HttpServletRequest request, Integer page, Integer pageSize) {
@@ -290,8 +312,24 @@ public class CartServiceImpl implements CartService {
                 if (updateMoney <= 0) {
                     throw new RuntimeException("余额扣除失败");
                 }
-                orderMapper.updateOrderStatus(orderId, 1);
                 log.info("✓ 余额支付成功，扣除金额: {}", totalAmount);
+
+                // 分配配送员
+                List<User> idleDeliveryUsers = userMapper.selectIdleDeliveryUsers();
+                if (idleDeliveryUsers == null || idleDeliveryUsers.isEmpty()) {
+                    return Result.error(400, "当前没有空闲的配送员");
+                }
+
+                Random random = new Random();
+                User selectedDelivery = idleDeliveryUsers.get(random.nextInt(idleDeliveryUsers.size()));
+
+                userMapper.updateDeliveryStatus(selectedDelivery.getId(), "配送中");
+
+                orderMapper.assignDelivery(orderId, selectedDelivery.getUsername(), 1);
+
+                log.info("订单 {} 分配配送员成功: {}", order.getId(), selectedDelivery.getUsername());
+
+
                 return Result.success(200, "支付成功");
             } else if ("cod".equals(order.getPaymentType())) {
                 log.info("选择货到付款，无需扣款");
@@ -367,4 +405,44 @@ public class CartServiceImpl implements CartService {
 
         return Result.success(200, "订单已删除");
     }
+
+    @Override
+    public Result getDeliveryOrderList(String deliveryId, Integer status, Integer pageNum, Integer pageSize) {
+        log.info("配送员 {} 查询订单列表，状态: {}, 页码: {}", deliveryId, status, pageNum);
+
+        if (pageNum == null || pageNum < 1) {
+            pageNum = 1;
+        }
+        if (pageSize == null || pageSize < 1) {
+            pageSize = 10;
+        }
+
+        Integer offset = (pageNum - 1) * pageSize;
+
+        List<Order> orders;
+        Integer total;
+
+        if (status == null) {
+            orders = orderMapper.getOrdersByDeliveryIdPage(deliveryId, offset, pageSize);
+            total = orderMapper.countOrdersByDeliveryId(deliveryId);
+        } else {
+            orders = orderMapper.getOrdersByDeliveryIdAndStatusPage(deliveryId, status, offset, pageSize);
+            total = orderMapper.countOrdersByDeliveryIdAndStatus(deliveryId, status);
+        }
+
+        for (Order order : orders) {
+            List<OrderItemEntity> items = orderMapper.getOrderItemsByOrderId(order.getId());
+            order.setItems(items);
+        }
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", orders);
+        data.put("total", total);
+        data.put("pageNum", pageNum);
+        data.put("pageSize", pageSize);
+        data.put("pages", (total + pageSize - 1) / pageSize);
+
+        return Result.success(200, "获取成功", data);
+    }
+
 }

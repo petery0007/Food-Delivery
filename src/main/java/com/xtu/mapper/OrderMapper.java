@@ -43,8 +43,8 @@ public interface OrderMapper {
     int finishOrder(Integer id, Integer status, LocalDateTime finishTime);
 
     //分配配送
-    @Update("UPDATE orders SET peisong_id = #{peisongId}, status = #{status} WHERE id = #{id}")
-    int assignDelivery(Integer id, String peisongId, Integer status);
+    @Update("UPDATE orders SET delivery_staff = #{deliveryStaff}, status = #{status} WHERE id = #{id}")
+    int assignDelivery(Integer id, String deliveryStaff, Integer status);
 
     //分页获取订单
     @Select("SELECT * FROM orders WHERE user_id = #{userId} ORDER BY create_time DESC LIMIT #{offset}, #{pageSize}")
@@ -64,4 +64,18 @@ public interface OrderMapper {
 
     @Delete("DELETE FROM orders WHERE id = #{id}")
     int deleteOrder(Integer id);
+
+    //配送员获取所有订单
+    @Select("SELECT * FROM orders WHERE delivery_staff = #{deliveryId} ORDER BY create_time DESC LIMIT #{offset}, #{pageSize}")
+    List<Order> getOrdersByDeliveryIdPage(String deliveryId, Integer offset, Integer pageSize);
+
+    @Select("SELECT COUNT(*) FROM orders WHERE delivery_staff = #{deliveryId}")
+    Integer countOrdersByDeliveryId(String deliveryId);
+
+    @Select("SELECT * FROM orders WHERE delivery_staff = #{deliveryId} AND status = #{status} ORDER BY create_time DESC LIMIT #{offset}, #{pageSize}")
+    List<Order> getOrdersByDeliveryIdAndStatusPage(String deliveryId, Integer status, Integer offset, Integer pageSize);
+
+    @Select("SELECT COUNT(*) FROM orders WHERE delivery_staff = #{deliveryId} AND status = #{status}")
+    Integer countOrdersByDeliveryIdAndStatus(String deliveryId, Integer status);
+
 }

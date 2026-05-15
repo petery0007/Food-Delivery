@@ -23,4 +23,6 @@ public interface CartService {
     Result cancelOrder(Integer orderId);
 
     Result deleteOrder(Integer orderId);
+
+    Result getDeliveryOrderList(String deliveryId, Integer status, Integer pageNum, Integer pageSize);
 }
