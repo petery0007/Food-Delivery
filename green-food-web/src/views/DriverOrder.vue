@@ -473,7 +473,7 @@ export default {
         type: 'success'
       }).then(async () => {
         try {
-          await request.put(`/delivery/order/deliver/${order.id}`)
+          await request.put(`/order/update/${order.id}`)
           this.$message.success('已确认送达')
           this.loadOrders()
         } catch (error) {

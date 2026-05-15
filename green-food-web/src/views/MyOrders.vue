@@ -746,7 +746,7 @@ export default {
         type: 'success'
       }).then(async () => {
         try {
-          await request.put(`/user/order/confirm/${order.id}`)
+          await request.put(`/order/update/${order.id}`)
           this.$message.success('确认收货成功')
           this.loadOrders()
         } catch (error) {

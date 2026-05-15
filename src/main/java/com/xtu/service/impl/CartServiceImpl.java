@@ -183,35 +183,6 @@ public class CartServiceImpl implements CartService {
                 log.info("✓ 商品 [{}] 库存扣减成功，扣减数量: {}", item.getProductName(), item.getQuantity());
             }
 
-            if ("balance".equals(orderRequest.getPaymentType())) {
-                log.info("使用余额支付，开始验证余额...");
-                Map<String, Object> userInfo = cartMapper.getUserInfo(userId);
-                if (userInfo == null) {
-                    return Result.error(400, "用户信息不存在");
-                }
-
-                BigDecimal balance = (BigDecimal) userInfo.get("money");
-                if (balance == null) {
-                    balance = BigDecimal.ZERO;
-                }
-
-                log.info("用户当前余额: {}, 订单金额: {}", balance, totalAmount);
-
-                if (balance.compareTo(totalAmount) < 0) {
-                    return Result.error(400, "余额不足，当前余额: ¥" + balance
-                            + "，需要: ¥" + totalAmount);
-                }
-
-                int updateMoney = cartMapper.updateUserMoney(userId, totalAmount.negate());
-                if (updateMoney <= 0) {
-                    throw new RuntimeException("余额扣除失败");
-                }
-
-                log.info("✓ 余额支付成功，扣除金额: {}", totalAmount);
-            } else if ("cod".equals(orderRequest.getPaymentType())) {
-                log.info("选择货到付款，无需扣款");
-            }
-
             log.info("开始删除购物车中的商品...");
             for (OrderItem item : items) {
                 cartMapper.deleteCartItemByUserIdAndProductId(userId, item.getProductId());
@@ -407,7 +378,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Result getDeliveryOrderList(String deliveryId, Integer status, Integer pageNum, Integer pageSize) {
+    public Result getDeliveryOrderList(Integer deliveryId, Integer status, Integer pageNum, Integer pageSize) {
         log.info("配送员 {} 查询订单列表，状态: {}, 页码: {}", deliveryId, status, pageNum);
 
         if (pageNum == null || pageNum < 1) {
@@ -421,13 +392,14 @@ public class CartServiceImpl implements CartService {
 
         List<Order> orders;
         Integer total;
-
+        User deliveryUser = userMapper.selectById(deliveryId);
+        String deliveryName = deliveryUser.getUsername();
         if (status == null) {
-            orders = orderMapper.getOrdersByDeliveryIdPage(deliveryId, offset, pageSize);
-            total = orderMapper.countOrdersByDeliveryId(deliveryId);
+            orders = orderMapper.getOrdersByDeliveryIdPage(deliveryName, offset, pageSize);
+            total = orderMapper.countOrdersByDeliveryId(deliveryName);
         } else {
-            orders = orderMapper.getOrdersByDeliveryIdAndStatusPage(deliveryId, status, offset, pageSize);
-            total = orderMapper.countOrdersByDeliveryIdAndStatus(deliveryId, status);
+            orders = orderMapper.getOrdersByDeliveryIdAndStatusPage(deliveryName, status, offset, pageSize);
+            total = orderMapper.countOrdersByDeliveryIdAndStatus(deliveryName, status);
         }
 
         for (Order order : orders) {

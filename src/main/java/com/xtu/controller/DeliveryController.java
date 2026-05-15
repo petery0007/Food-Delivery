@@ -15,7 +15,7 @@ public class DeliveryController {
     private CartService cartService;
 
     @GetMapping("/order/list")
-    public Result getDeliveryOrderList(@RequestParam String deliveryId,
+    public Result getDeliveryOrderList(@RequestParam Integer deliveryId,
                                        @RequestParam(required = false) Integer status,
                                        @RequestParam(defaultValue = "1") Integer pageNum,
                                        @RequestParam(defaultValue = "10") Integer pageSize){
