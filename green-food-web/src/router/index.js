@@ -93,6 +93,11 @@ const routes = [
                 name: 'DeliveryTasks',
                 component: () => import('../views/DriverOrder.vue')
             },
+            {
+                path: 'orders-admin',
+                name: 'OrderAdmin',
+                component: () => import('../views/OrderAdmin.vue')
+            }
         ]
     }
 ]
