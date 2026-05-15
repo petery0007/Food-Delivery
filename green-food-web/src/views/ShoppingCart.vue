@@ -22,8 +22,8 @@ NEW_FILE_CODE
       <div v-else>
         <el-table
             :data="cartList"
-            border
-            style="width: 100%"
+            border            style="width: 100%"
+            ref="cartTable"
             @selection-change="handleSelectionChange"
         >
           <!-- 选择框 -->
@@ -243,9 +243,11 @@ export default {
     // 处理全选/取消全选
     handleSelectAll(value) {
       if (value) {
-        this.selectedItems = [...this.cartList]
+        this.cartList.forEach(row => {
+          this.$refs.cartTable.toggleRowSelection(row, true)
+        })
       } else {
-        this.selectedItems = []
+        this.$refs.cartTable.clearSelection()
       }
     },
 
