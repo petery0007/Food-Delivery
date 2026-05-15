@@ -11,7 +11,6 @@
     <el-card shadow="never" style="margin-bottom: 20px;">
       <el-tabs v-model="activeTab" @tab-click="handleTabClick">
         <el-tab-pane label="全部订单" name="all"></el-tab-pane>
-        <el-tab-pane label="待配送" name="pending"></el-tab-pane>
         <el-tab-pane label="配送中" name="delivering"></el-tab-pane>
         <el-tab-pane label="已送达" name="delivered"></el-tab-pane>
       </el-tabs>
@@ -109,7 +108,6 @@
             <div class="order-actions">
               <!-- 待配送状态 -->
               <template v-if="order.status === 0">
-                <el-button size="small" type="primary" @click="handleStartDelivery(order)">开始配送</el-button>
               </template>
 
               <!-- 配送中状态 -->
@@ -164,7 +162,6 @@ export default {
         return null
       }
       const statusMap = {
-        'pending': 0,
         'delivering': 1,
         'delivered': 2
       }
@@ -467,23 +464,6 @@ export default {
         return 0
       }
       return order.items.reduce((total, item) => total + item.quantity, 0)
-    },
-
-    handleStartDelivery(order) {
-      this.$confirm(`确认开始配送订单 ${order.orderNo}？`, '开始配送', {
-        confirmButtonText: '确认',
-        cancelButtonText: '取消',
-        type: 'info'
-      }).then(async () => {
-        try {
-          await request.put(`/delivery/order/start/${order.id}`)
-          this.$message.success('已开始配送')
-          this.loadOrders()
-        } catch (error) {
-          console.error('操作失败:', error)
-          this.$message.error('操作失败，请稍后重试')
-        }
-      }).catch(() => {})
     },
 
     handleDelivered(order) {

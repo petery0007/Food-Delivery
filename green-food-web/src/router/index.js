@@ -81,6 +81,12 @@ const routes = [
                 name: 'MyOrders',
                 component: () => import('../views/MyOrders.vue')
             },
+            // 新增用户端商品评价界面
+            {
+                path: 'reviews',
+                name: 'MyReviews',
+                component: () => import('../views/MyReviews.vue')
+            },
             // 新增配送员端配送订单界面
             {
                 path: 'delivery-tasks',

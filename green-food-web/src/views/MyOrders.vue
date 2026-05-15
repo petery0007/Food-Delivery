@@ -47,6 +47,30 @@
             </div>
           </div>
 
+          <!-- 收货地址信息 -->
+          <div class="order-address">
+            <el-row :gutter="20">
+              <el-col :span="6">
+                <div class="address-item">
+                  <span class="label">收货人：</span>
+                  <span class="value">{{ order.receiver }}</span>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="address-item">
+                  <span class="label">联系电话：</span>
+                  <span class="value">{{ order.phone }}</span>
+                </div>
+              </el-col>
+              <el-col :span="12">
+                <div class="address-item">
+                  <span class="label">收货地址：</span>
+                  <span class="value address-text">{{ order.address }}</span>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+
           <!-- 订单商品列表 -->
           <div class="order-products">
             <div v-for="item in order.items" :key="item.id" class="product-row">
@@ -733,7 +757,14 @@ export default {
     },
 
     handleReview(order) {
-      this.$message.info('评价功能开发中...')
+      // 跳转到评价页面，并传递订单信息
+      this.$router.push({
+        name: 'MyReviews',
+        query: {
+          orderId: order.id,
+          items: JSON.stringify(order.items)
+        }
+      })
     },
 
     handleDelete(order) {
@@ -825,6 +856,39 @@ export default {
 .order-time {
   color: #909399;
   font-size: 14px;
+}
+
+.order-address {
+  padding: 15px 20px;
+  background-color: #fff;
+  border-bottom: 1px solid #ebeef5;
+}
+
+.address-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.address-item:last-child {
+  margin-bottom: 0;
+}
+
+.address-item .label {
+  color: #909399;
+  font-size: 14px;
+  min-width: 70px;
+  flex-shrink: 0;
+}
+
+.address-item .value {
+  color: #303133;
+  font-size: 14px;
+}
+
+.address-item .address-text {
+  color: #606266;
+  word-break: break-all;
 }
 
 .order-products {
