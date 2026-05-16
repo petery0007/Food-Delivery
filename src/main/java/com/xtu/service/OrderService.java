@@ -16,4 +16,6 @@ public interface OrderService {
     Result deleteOrder(Integer orderId);
 
     Result updateOrderStatus(HttpServletRequest request, Integer orderId);
+
+    Result getAllOrders(Integer page, Integer pageSize, Integer status, String receiver, String deliveryStaff);
 }

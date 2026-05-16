@@ -81,4 +81,29 @@ public interface OrderMapper {
     @Update("UPDATE orders SET status = #{status}, finish_time = #{finishTime} WHERE id = #{id}")
     int updateOrderStatusAndFinishTime(Integer id, Integer status, LocalDateTime finishTime);
 
+
+    // 分页查询订单（支持多条件筛选）
+    @Select("<script>" +
+            "SELECT * FROM orders " +
+            "<where>" +
+            "  <if test='status != null'> AND status = #{status} </if>" +
+            "  <if test='receiver != null and receiver != \"\"'> AND receiver LIKE CONCAT('%', #{receiver}, '%') </if>" +
+            "  <if test='deliveryStaff != null and deliveryStaff != \"\"'> AND delivery_staff LIKE CONCAT('%', #{deliveryStaff}, '%') </if>" +
+            "</where>" +
+            "ORDER BY create_time DESC " +
+            "LIMIT #{offset}, #{pageSize}" +
+            "</script>")
+    List<Order> getAllOrdersPage(Integer offset, Integer pageSize, Integer status, String receiver, String deliveryStaff);
+
+    // 统计订单总数（支持多条件筛选）
+    @Select("<script>" +
+            "SELECT COUNT(*) FROM orders " +
+            "<where>" +
+            "  <if test='status != null'> AND status = #{status} </if>" +
+            "  <if test='receiver != null and receiver != \"\"'> AND receiver LIKE CONCAT('%', #{receiver}, '%') </if>" +
+            "  <if test='deliveryStaff != null and deliveryStaff != \"\"'> AND delivery_staff LIKE CONCAT('%', #{deliveryStaff}, '%') </if>" +
+            "</where>" +
+            "</script>")
+    Integer countAllOrders(Integer status, String receiver, String deliveryStaff);
+
 }

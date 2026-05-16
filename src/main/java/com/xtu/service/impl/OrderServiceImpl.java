@@ -422,4 +422,49 @@ public class OrderServiceImpl implements OrderService {
         return Result.success(200, "确认收货成功", data);
     }
 
+    @Override
+    public Result getAllOrders(Integer page, Integer pageSize, Integer status, String receiver, String deliveryStaff) {
+        log.info("========== 管理员查询订单开始 ==========");
+        log.info("页码: {}, 每页数量: {}, 状态: {}, 收货人: {}, 配送员: {}",
+                page, pageSize, status, receiver, deliveryStaff);
+
+        try {
+            if (page == null || page < 1) {
+                page = 1;
+            }
+            if (pageSize == null || pageSize < 1) {
+                pageSize = 10;
+            }
+
+            Integer offset = (page - 1) * pageSize;
+
+            // 分页查询订单列表
+            List<Order> orders = orderMapper.getAllOrdersPage(offset, pageSize, status, receiver, deliveryStaff);
+
+            // 查询总记录数
+            Integer total = orderMapper.countAllOrders(status, receiver, deliveryStaff);
+
+            // 为每个订单加载商品明细
+            for (Order order : orders) {
+                List<OrderItemEntity> items = orderMapper.getOrderItemsByOrderId(order.getId());
+                order.setItems(items);
+            }
+
+            log.info("查询到订单总数: {}, 当前页订单数: {}", total, orders.size());
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", orders);
+            data.put("total", total);
+            data.put("page", page);
+            data.put("pageSize", pageSize);
+            data.put("pages", (total + pageSize - 1) / pageSize);
+
+            return Result.success(200, "获取成功", data);
+
+        } catch (Exception e) {
+            log.error("========== 管理员查询订单失败 ==========", e);
+            log.error("错误信息: {}", e.getMessage());
+            return Result.error(500, "获取订单列表失败: " + e.getMessage());
+        }
+    }
 }

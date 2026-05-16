@@ -4,6 +4,7 @@ import com.xtu.pojo.Product;
 import com.xtu.pojo.ProductInfo;
 import com.xtu.pojo.ProductStatusRequest;
 import com.xtu.pojo.UserInfo2;
+import com.xtu.service.OrderService;
 import com.xtu.service.ProductService;
 import com.xtu.service.UserService;
 import com.xtu.utils.Result;
@@ -21,6 +22,9 @@ public class AdminController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private OrderService orderService;
 
     // 获取所有商品分页
     @GetMapping("/products")
@@ -79,11 +83,17 @@ public class AdminController {
         return userService.getAllPeisong(page, pageSize);
     }
 
-    // 搜索配送员列表
-    @GetMapping("/peisong/list")
-    public Result getPeisongByKeywords(@RequestParam(defaultValue = "1") Integer page,
-                                     @RequestParam(defaultValue = "10") Integer pageSize,
-                                     @ModelAttribute UserInfo2 userInfo2){
-        return userService.getPeisongByKeywords(page, pageSize, userInfo2);
+    // 获取所有订单（支持分页和多条件搜索）
+    @GetMapping("/orders")
+    public Result getAllOrders(@RequestParam(defaultValue = "1") Integer page,
+                               @RequestParam(defaultValue = "10") Integer pageSize,
+                               @RequestParam(required = false) Integer status,
+                               @RequestParam(required = false) String receiver,
+                               @RequestParam(required = false) String deliveryStaff) {
+        log.info("管理员查询订单，page: {}, pageSize: {}, status: {}, receiver: {}, deliveryStaff: {}",
+                page, pageSize, status, receiver, deliveryStaff);
+        return orderService.getAllOrders(page, pageSize, status, receiver, deliveryStaff);
     }
+
+
 }
