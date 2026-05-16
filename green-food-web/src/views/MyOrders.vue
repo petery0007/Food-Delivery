@@ -681,7 +681,7 @@ export default {
     // 确认支付
     async confirmPay(order) {
       try {
-        await this.$confirm(`确认支付订单 ${order.orderNo}，金额 ¥${order.totalAmount.toFixed(2)}？`, '支付确认', {
+        await this.$confirm(`确认支付订单金额 ¥${order.totalAmount.toFixed(2)}？`, '支付确认', {
           confirmButtonText: '确认支付',
           cancelButtonText: '取消',
           type: 'warning'
@@ -723,7 +723,7 @@ export default {
     },
 
     handleCancel(order) {
-      this.$confirm(`确认取消订单 ${order.orderNo}？`, '取消确认', {
+      this.$confirm(`确认取消订单？`, '取消确认', {
         confirmButtonText: '确认取消',
         cancelButtonText: '不取消了',
         type: 'warning'
@@ -740,7 +740,7 @@ export default {
     },
 
     handleConfirmReceive(order) {
-      this.$confirm(`确认已收到订单 ${order.orderNo} 的商品？`, '确认收货', {
+      this.$confirm(`确认已收到订单的商品？`, '确认收货', {
         confirmButtonText: '确认收货',
         cancelButtonText: '取消',
         type: 'success'
@@ -768,7 +768,7 @@ export default {
     },
 
     handleDelete(order) {
-      this.$confirm(`确认删除订单 ${order.orderNo}？删除后不可恢复！`, '删除确认', {
+      this.$confirm(`确认删除订单？删除后不可恢复！`, '删除确认', {
         confirmButtonText: '确认删除',
         cancelButtonText: '取消',
         type: 'warning'
@@ -787,7 +787,7 @@ export default {
     },
 
     handleReorder(order) {
-      this.$confirm(`确认根据订单 ${order.orderNo} 重新下单？`, '重新下单', {
+      this.$confirm(`确认根据订单重新下单？`, '重新下单', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'info'
