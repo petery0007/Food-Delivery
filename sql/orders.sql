@@ -1,4 +1,3 @@
-NEW_FILE_CODE
 -- 订单主表
 CREATE TABLE IF NOT EXISTS orders
 (
