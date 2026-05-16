@@ -20,5 +20,12 @@ public class ProductController {
         return productService.getProductById(id);
     }
 
+    @GetMapping("/{id}/reviews")
+    public Result getProductReviews(@PathVariable Integer id,
+                                    @RequestParam(defaultValue = "1") Integer page,
+                                    @RequestParam(defaultValue = "10") Integer pageSize) {
+        return productService.getProductReviews(id, page, pageSize);
+    }
+
 
 }

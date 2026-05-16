@@ -17,4 +17,6 @@ public interface ProductService {
     Result addProduct(Product product);
 
     Result getProductById(Integer id);
+
+    Result getProductReviews(Integer id, Integer page, Integer pageSize);
 }
