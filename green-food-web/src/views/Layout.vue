@@ -11,6 +11,7 @@
           background-color="#304156"
           text-color="#bfcbd9"
           active-text-color="#409EFF"
+          :default-active="activeMenu"
           router>
 
         <!-- 【权限控制核心】：使用 v-if 判断当前角色是否包含在该菜单的允许角色数组中 -->
@@ -69,6 +70,20 @@ export default {
       currentRole: '', // 当前登录的角色
       currentName: ''
     };
+  },
+  computed: {
+    activeMenu() {
+      const route = this.$route
+      const { path } = route
+
+      // 如果是订单确认页面，高亮购物车菜单
+      if (path === '/layout/order-confirm') {
+        return '/layout/cart'
+      }
+
+      // 其他情况返回当前路径，让 el-menu 自动匹配
+      return path
+    }
   },
   created() {
     // 页面创建时，从本地存储中取出登录时保存的信息

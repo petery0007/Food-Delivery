@@ -111,6 +111,104 @@ NEW_FILE_CODE
           </div>
         </div>
 
+        <!-- 商品评价 -->
+        <el-divider></el-divider>
+        <div class="reviews-section">
+          <div class="section-header">
+            <h2 class="section-title">商品评价</h2>
+            <el-tag type="warning" size="medium">
+              共 {{ reviews.length }} 条评价
+            </el-tag>
+          </div>
+
+          <!-- 评价统计 -->
+          <div class="review-summary" v-if="reviews.length > 0">
+            <div class="summary-item">
+              <span class="label">平均评分：</span>
+              <el-rate
+                  v-model="averageRating"
+                  disabled
+                  show-score
+                  text-color="#ff9900"
+                  score-template="{value}"
+              ></el-rate>
+              <span class="score-text">{{ averageRating.toFixed(1) }} 分</span>
+            </div>
+            <div class="summary-item">
+              <span class="label">评分分布：</span>
+              <div class="rating-distribution">
+                <div v-for="star in [5, 4, 3, 2, 1]" :key="star" class="distribution-row">
+                  <span class="star-label">{{ star }}星</span>
+                  <el-progress
+                      :percentage="getRatingPercentage(star)"
+                      :color="getProgressColor(star)"
+                      :stroke-width="8"                      style="width: 200px;"
+                  ></el-progress>
+                  <span class="count-text">{{ getRatingCount(star) }}条</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 评价列表 -->
+          <div class="reviews-list" v-if="reviews.length > 0">
+            <div v-for="review in displayedReviews" :key="review.id" class="review-card">
+              <div class="review-header">
+                <div class="user-info">
+                  <el-avatar :size="40" :src="review.userAvatar">
+                    {{ review.username ? review.username.charAt(0) : '用' }}
+                  </el-avatar>
+                  <div class="user-details">
+                    <div class="username">{{ review.username || '匿名用户' }}</div>
+                    <div class="review-time">{{ review.createTime }}</div>
+                  </div>
+                </div>
+                <el-rate
+                    v-model="review.rating"
+                    disabled
+                    show-score
+                    text-color="#ff9900"
+                    score-template="{value}分"
+                ></el-rate>
+              </div>
+              <div class="review-content">
+                <p>{{ review.comment }}</p>
+              </div>
+              <!-- 如果有图片评价可以在此处展示 -->
+              <div class="review-images" v-if="review.images && review.images.length > 0">
+                <img
+                    v-for="(img, index) in review.images"
+                    :key="index"
+                    :src="img"
+                    class="review-image"
+                    @click="previewImage(img)"
+                >
+              </div>
+            </div>
+
+            <!-- 加载更多按钮 -->
+            <div class="load-more" v-if="reviews.length > pageSize">
+              <el-button
+                  type="primary"
+                  plain
+                  @click="loadMoreReviews"
+                  v-if="displayedReviews.length < reviews.length"
+              >
+                加载更多
+              </el-button>
+              <span v-else class="no-more">没有更多评价了</span>
+            </div>
+          </div>
+
+          <!-- 空评价提示 -->
+          <el-empty
+              v-else
+              description="暂无评价，快来成为第一个评价的人吧！"
+              :image-size="100"
+          >
+          </el-empty>
+        </div>
+
         <!-- 其他信息（仅管理员可见） -->
         <el-divider v-if="isAdminView"></el-divider>
         <div class="admin-info-section" v-if="isAdminView">
@@ -147,7 +245,11 @@ export default {
     return {
       product: null,
       loading: false,
-      productId: null
+      productId: null,
+      reviews: [],
+      reviewsLoading: false,
+      displayedReviews: [],
+      pageSize: 5
     }
   },
   computed: {
@@ -158,12 +260,19 @@ export default {
     // 判断是否为管理端视图
     isAdminView() {
       return !this.isUserView
+    },
+    // 计算平均评分
+    averageRating() {
+      if (this.reviews.length === 0) return 0
+      const sum = this.reviews.reduce((acc, review) => acc + review.rating, 0)
+      return sum / this.reviews.length
     }
   },
   created() {
     this.productId = this.$route.params.id
     if (this.productId) {
       this.loadProductInfo()
+      this.loadProductReviews()
     } else {
       this.$message.error('商品ID缺失')
       this.goBack()
@@ -197,6 +306,146 @@ export default {
       } finally {
         this.loading = false
       }
+    },
+
+    async loadProductReviews() {
+      this.reviewsLoading = true
+      try {
+        // 尝试从后端获取评价数据
+        const res = await request.get(`/products/${this.productId}/reviews`)
+
+        if (res.data && Array.isArray(res.data)) {
+          this.reviews = res.data
+          this.displayedReviews = this.reviews.slice(0, this.pageSize)
+        } else {
+          this.loadMockReviews()
+        }
+      } catch (error) {
+        console.error('加载评价失败，使用模拟数据:', error)
+        this.loadMockReviews()
+      } finally {
+        this.reviewsLoading = false
+      }
+    },
+
+    loadMockReviews() {
+      console.log('使用模拟评价数据')
+      this.reviews = [
+        {
+          id: 1,
+          productId: this.productId,
+          userId: 2,
+          username: '张三',
+          userAvatar: '',
+          rating: 5,
+          comment: '非常新鲜的商品，质量很好，包装也很仔细，物流速度快，非常满意的一次购物体验！',
+          createTime: '2026-05-10 14:30:00',
+          images: []
+        },
+        {
+          id: 2,
+          productId: this.productId,
+          userId: 3,
+          username: '李四',
+          userAvatar: '',
+          rating: 4,
+          comment: '整体不错，就是有一个有点小瑕疵，但不影响使用，性价比还是很高的。',
+          createTime: '2026-05-08 10:15:00',
+          images: []
+        },
+        {
+          id: 3,
+          productId: this.productId,
+          userId: 4,
+          username: '王五',
+          userAvatar: '',
+          rating: 5,
+          comment: '第二次购买了，品质一如既往的好，会继续支持！',
+          createTime: '2026-05-05 16:45:00',
+          images: []
+        },
+        {
+          id: 4,
+          productId: this.productId,
+          userId: 5,
+          username: '赵六',
+          userAvatar: '',
+          rating: 3,
+          comment: '一般般吧，感觉和描述有点差距，不过价格还算合理。',
+          createTime: '2026-05-01 09:20:00',
+          images: []
+        },
+        {
+          id: 5,
+          productId: this.productId,
+          userId: 6,
+          username: '孙七',
+          userAvatar: '',
+          rating: 5,
+          comment: '超级棒！比超市新鲜多了，而且价格便宜，强烈推荐！',
+          createTime: '2026-04-28 20:10:00',
+          images: []
+        },
+        {
+          id: 6,
+          productId: this.productId,
+          userId: 7,
+          username: '周八',
+          userAvatar: '',
+          rating: 4,
+          comment: '挺好的，送货速度快，包装完好，就是分量稍微少了一点。',
+          createTime: '2026-04-25 11:30:00',
+          images: []
+        },
+        {
+          id: 7,
+          productId: this.productId,
+          userId: 8,
+          username: '吴九',
+          userAvatar: '',
+          rating: 5,
+          comment: '非常好，已经是老顾客了，每次都很满意！',
+          createTime: '2026-04-20 15:50:00',
+          images: []
+        }
+      ]
+      this.displayedReviews = this.reviews.slice(0, this.pageSize)
+    },
+
+    // 获取某个评分的数量
+    getRatingCount(star) {
+      return this.reviews.filter(r => r.rating === star).length
+    },
+
+    // 获取某个评分的百分比
+    getRatingPercentage(star) {
+      if (this.reviews.length === 0) return 0
+      const count = this.getRatingCount(star)
+      return Math.round((count / this.reviews.length) * 100)
+    },
+
+    // 获取进度条颜色
+    getProgressColor(star) {
+      const colors = {
+        5: '#67c23a',
+        4: '#409eff',
+        3: '#e6a23c',
+        2: '#f56c6c',
+        1: '#f56c6c'
+      }
+      return colors[star] || '#dcdfe6'
+    },
+
+    // 加载更多评价
+    loadMoreReviews() {
+      const currentLength = this.displayedReviews.length
+      const nextReviews = this.reviews.slice(currentLength, currentLength + this.pageSize)
+      this.displayedReviews = [...this.displayedReviews, ...nextReviews]
+    },
+
+    // 预览图片
+    previewImage(imageUrl) {
+      window.open(imageUrl, '_blank')
     },
 
     addToCart() {
@@ -417,6 +666,168 @@ export default {
   min-height: 100px;
 }
 
+/* 评价区域样式 */
+.reviews-section {
+  margin-top: 30px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.review-summary {
+  background-color: #f5f7fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.summary-item:last-child {
+  margin-bottom: 0;
+}
+
+.summary-item .label {
+  font-size: 14px;
+  color: #606266;
+  margin-right: 15px;
+  font-weight: bold;
+  min-width: 80px;
+}
+
+.score-text {
+  margin-left: 10px;
+  font-size: 16px;
+  color: #ff9900;
+  font-weight: bold;
+}
+
+.rating-distribution {
+  flex: 1;
+}
+
+.distribution-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.distribution-row:last-child {
+  margin-bottom: 0;
+}
+
+.star-label {
+  font-size: 12px;
+  color: #909399;
+  margin-right: 10px;
+  min-width: 30px;
+}
+
+.count-text {
+  font-size: 12px;
+  color: #909399;
+  margin-left: 10px;
+  min-width: 50px;
+}
+
+.reviews-list {
+  margin-top: 20px;
+}
+
+.review-card {
+  background-color: #fff;
+  border: 1px solid #ebeef5;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 15px;
+  transition: box-shadow 0.3s;
+}
+
+.review-card:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.review-card:last-child {
+  margin-bottom: 0;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-details {
+  margin-left: 12px;
+}
+
+.username {
+  font-size: 14px;
+  color: #303133;
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+
+.review-time {
+  font-size: 12px;
+  color: #909399;
+}
+
+.review-content {
+  margin-bottom: 15px;
+}
+
+.review-content p {
+  margin: 0;
+  line-height: 1.8;
+  color: #606266;
+  font-size: 14px;
+}
+
+.review-images {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.review-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.review-image:hover {
+  transform: scale(1.05);
+}
+
+.load-more {
+  text-align: center;
+  margin-top: 20px;
+  padding: 20px 0;
+}
+
+.no-more {
+  color: #909399;
+  font-size: 14px;
+}
+
 .admin-info-section {
   margin-top: 30px;
 }
@@ -449,6 +860,21 @@ export default {
   .action-buttons .el-button {
     width: 100% !important;
     margin-right: 0 !important;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .distribution-row {
+    flex-wrap: wrap;
+  }
+
+  .distribution-row .el-progress {
+    width: 100% !important;
+    margin: 5px 0;
   }
 }
 

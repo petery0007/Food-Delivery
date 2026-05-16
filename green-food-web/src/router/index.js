@@ -46,8 +46,8 @@ const routes = [
             },
             {
                 path: 'delivery-staff',
-                name: 'DriverMage',
-                component: () => import('../views/DriverMage.vue')
+                name: 'DeliveryMage',
+                component: () => import('../views/DeliveryMage.vue')
             },
             // 用户信息管理（管理员）
             {
@@ -91,7 +91,7 @@ const routes = [
             {
                 path: 'delivery-tasks',
                 name: 'DeliveryTasks',
-                component: () => import('../views/DriverOrder.vue')
+                component: () => import('../views/DeliveryOrder.vue')
             },
             {
                 path: 'orders-admin',

@@ -8,18 +8,18 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
-@RequestMapping("/api/v1/delivery")
+@RequestMapping("/api/v1")
 public class DeliveryController {
 
     @Autowired
     private CartService cartService;
 
-    @GetMapping("/order/list")
-    public Result getDeliveryOrderList(@RequestParam Integer deliveryId,
-                                       @RequestParam(required = false) Integer status,
-                                       @RequestParam(defaultValue = "1") Integer pageNum,
-                                       @RequestParam(defaultValue = "10") Integer pageSize){
-        log.info("配送员查询订单列表，deliveryId: {}, status: {}", deliveryId, status);
-        return cartService.getDeliveryOrderList(deliveryId, status, pageNum, pageSize);
+    @GetMapping("/delivery/order/list/{deliveryId}")
+    public Result list(@PathVariable Integer deliveryId,
+                       @RequestParam(defaultValue = "1") Integer page,
+                       @RequestParam(defaultValue = "10") Integer pageSize) {
+        log.info("list()");
+        return cartService.getDeliveryOrderList(deliveryId, null, page, pageSize);
     }
+
 }
