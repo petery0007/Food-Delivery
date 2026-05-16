@@ -234,7 +234,7 @@ public class UserServiceImpl implements UserService {
             List<User> users = userMapper.selectUserByPhone(offset, pageSize, userInfo2.getPhone());
             int total = users.size();
             if(total == 0){
-                return Result.error(401, "查询用户不存在");
+                return Result.error(400, "查询用户不存在");
             }
             Map<String, Object> data = new HashMap<>();
             data.put("list", users);
@@ -245,7 +245,7 @@ public class UserServiceImpl implements UserService {
             List<User> users = userMapper.selectUserByUsername(offset, pageSize, userInfo2.getUsername());
             int total = users.size();
             if(total == 0){
-                return Result.error(401, "查询用户不存在");
+                return Result.error(400, "查询用户不存在");
             }
             Map<String, Object> data = new HashMap<>();
             data.put("list", users);
@@ -258,7 +258,7 @@ public class UserServiceImpl implements UserService {
         List<User> users = userMapper.selectUserByUsernameAndPhone(offset, pageSize, userInfo2.getUsername(), userInfo2.getPhone());
         int total = users.size();
         if(total == 0){
-            return Result.error(401, "查询用户不存在");
+            return Result.error(400, "查询用户不存在");
         }
         Map<String, Object> data = new HashMap<>();
         data.put("list", users);
