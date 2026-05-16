@@ -445,7 +445,8 @@ export default {
       const statusMap = {
         0: '待配送',
         1: '配送中',
-        2: '已送达'
+        2: '已送达',
+        3: '已完成'
       }
       return statusMap[status] || '未知状态'
     },

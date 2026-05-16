@@ -14,12 +14,13 @@ public class DeliveryController {
     @Autowired
     private CartService cartService;
 
-    @GetMapping("/delivery/order/list/{deliveryId}")
-    public Result list(@PathVariable Integer deliveryId,
-                       @RequestParam(defaultValue = "1") Integer page,
+    @GetMapping("/delivery/order/list")
+    public Result list(@RequestParam Integer deliveryId,
+                       @RequestParam(required = false) Integer status,
+                       @RequestParam(defaultValue = "1") Integer pageNum,
                        @RequestParam(defaultValue = "10") Integer pageSize) {
         log.info("list()");
-        return cartService.getDeliveryOrderList(deliveryId, null, page, pageSize);
+        return cartService.getDeliveryOrderList(deliveryId, status, pageNum, pageSize);
     }
 
 }
