@@ -22,7 +22,6 @@
           <el-menu-item index="/layout/users"><i class="el-icon-user"></i>用户信息管理</el-menu-item>
           <el-menu-item index="/layout/products"><i class="el-icon-goods"></i>商品信息管理</el-menu-item>
           <el-menu-item index="/layout/orders-admin"><i class="el-icon-s-order"></i>订单信息管理</el-menu-item>
-          <el-menu-item index="/layout/notices"><i class="el-icon-message-solid"></i>公告信息管理</el-menu-item>
           <el-menu-item index="/layout/delivery-staff"><i class="el-icon-truck"></i>配送人员管理</el-menu-item>
         </template>
 

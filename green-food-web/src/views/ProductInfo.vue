@@ -313,15 +313,47 @@ export default {
       try {
         // 尝试从后端获取评价数据
         const res = await request.get(`/products/${this.productId}/reviews`)
-
-        if (res.data && Array.isArray(res.data)) {
-          this.reviews = res.data
+    
+        console.log('后端返回的评价数据:', res.data)
+    
+        // 适配不同的返回格式
+        let reviewList = []
+            
+        if (Array.isArray(res.data)) {
+          // 格式1: 直接返回数组
+          reviewList = res.data
+        } else if (res.data && res.data.list && Array.isArray(res.data.list)) {
+          // 格式2: 返回分页对象 { list: [...], total: 6 }
+          reviewList = res.data.list
+        } else if (res.data && res.data.records && Array.isArray(res.data.records)) {
+          // 格式3: MyBatis-Plus 分页格式 { records: [...], total: 6 }
+          reviewList = res.data.records
+        } else if (res.code === 200 && res.data) {
+          // 格式4: 标准响应 { code: 200, data: [...] }
+          reviewList = Array.isArray(res.data) ? res.data : []
+        }
+    
+        if (reviewList.length > 0) {
+          // 处理后端数据,映射为前端需要的格式
+          this.reviews = reviewList.map(item => ({
+            id: item.comment_id || item.id,
+            productId: item.goods_id || item.productId,
+            userId: item.user_id || item.userId,
+            username: item.username || '匿名用户',
+            userAvatar: item.userAvatar || '',
+            rating: item.score || item.rating,
+            comment: item.content || item.comment,
+            createTime: item.create_time || item.createTime,
+            images: item.images || []
+          }))
           this.displayedReviews = this.reviews.slice(0, this.pageSize)
+          console.log('成功加载评价数据:', this.reviews.length, '条')
         } else {
+          console.warn('后端返回的评价数据为空,使用模拟数据')
           this.loadMockReviews()
         }
       } catch (error) {
-        console.error('加载评价失败，使用模拟数据:', error)
+        console.error('加载评价失败,使用模拟数据:', error)
         this.loadMockReviews()
       } finally {
         this.reviewsLoading = false
@@ -451,7 +483,7 @@ export default {
     addToCart() {
       this.$message.success(`已将【${this.product.name}】加入购物车`)
       // 替换为实际的购物车接口
-      // request.post('/cart/add', { productId: this.product.id, quantity: 1 })
+      request.post('/user/cart/add', { productId: this.product.id, quantity: 1 })
     },
 
     // 管理端：切换上下架状态
