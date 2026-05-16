@@ -78,4 +78,7 @@ public interface OrderMapper {
     @Select("SELECT COUNT(*) FROM orders WHERE delivery_staff = #{deliveryId} AND status = #{status}")
     Integer countOrdersByDeliveryIdAndStatus(String deliveryId, Integer status);
 
+    @Update("UPDATE orders SET status = #{status}, finish_time = #{finishTime} WHERE id = #{id}")
+    int updateOrderStatusAndFinishTime(Integer id, Integer status, LocalDateTime finishTime);
+
 }

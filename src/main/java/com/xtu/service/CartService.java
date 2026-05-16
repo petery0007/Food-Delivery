@@ -14,15 +14,5 @@ public interface CartService {
 
     Result addCart(HttpServletRequest request, Cart cart);
 
-    Result createOrder(HttpServletRequest request, OrderCreateRequest orderRequest);
-
-    Result getOrderList(HttpServletRequest request, Integer page, Integer pageSize);
-
-    Result payOrder(HttpServletRequest request, Integer orderId);
-
-    Result cancelOrder(Integer orderId);
-
-    Result deleteOrder(Integer orderId);
-
     Result getDeliveryOrderList(Integer deliveryId, Integer status, Integer pageNum, Integer pageSize);
 }

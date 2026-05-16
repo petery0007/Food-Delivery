@@ -45,4 +45,7 @@ public interface UserMapper {
     List<User> selectIdleDeliveryUsers();
     @Update("UPDATE user SET status = #{status} WHERE id = #{id}")
     int updateDeliveryStatus(Integer id, String status);
+    @Select("SELECT id FROM user WHERE username = #{username}")
+    Integer selectUserIdByUsername(String username);
+
 }

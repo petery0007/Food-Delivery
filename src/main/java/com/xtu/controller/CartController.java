@@ -42,38 +42,5 @@ public class CartController {
         return cartService.deleteCart(id);
     }
 
-    //提交订单
-    @PostMapping("/order/create")
-    public Result createOrder(HttpServletRequest request, @RequestBody OrderCreateRequest orderRequest){
-        log.info("创建订单，订单数据: {}", orderRequest);
-        return cartService.createOrder(request, orderRequest);
-    }
 
-    // 获取订单列表
-    @GetMapping("/order/list")
-    public Result getOrderList(HttpServletRequest request,
-                               @RequestParam(defaultValue = "1") Integer page,
-                               @RequestParam(defaultValue = "10") Integer pageSize){
-        log.info("获取订单列表，页码: {}, 每页数量: {}", page, pageSize);
-        return cartService.getOrderList(request, page, pageSize);
-    }
-
-    // 支付订单
-    @PostMapping("/order/pay/{orderId}")
-    public Result payOrder(HttpServletRequest request,@PathVariable Integer orderId){
-        log.info("支付订单，订单id: {}", orderId);
-        return cartService.payOrder(request, orderId);
-    }
-
-    // 取消订单
-    @PutMapping("/order/cancel/{orderId}")
-    public Result cancelOrder(@PathVariable Integer orderId){
-        return cartService.cancelOrder(orderId);
-    }
-
-    // 删除订单
-    @DeleteMapping("/order/delete/{orderId}")
-    public Result deleteOrder(@PathVariable Integer orderId){
-        return cartService.deleteOrder(orderId);
-    }
 }
