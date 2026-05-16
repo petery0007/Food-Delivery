@@ -217,6 +217,8 @@ export default {
         if (res && res.data && res.data.list) {
           this.orderList = res.data.list
           this.total = res.data.total || 0
+          // 加载订单后，填充配送员电话
+          await this.fillDeliveryPhones()
         } else {
           this.orderList = []
           this.total = 0
@@ -226,6 +228,36 @@ export default {
         this.loadMockOrders()
       } finally {
         this.loading = false
+      }
+    },
+
+    // 填充所有订单的配送员电话
+    async fillDeliveryPhones() {
+      try {
+        // 一次性获取所有配送员信息
+        const res = await request.get('/admin/peisong', {
+          params: {
+            page: 1,
+            pageSize: 100  // 假设配送员不超过100人
+          }
+        })
+
+        if (res.data && res.data.list) {
+          // 构建配送员姓名到电话的映射
+          const deliveryPhoneMap = {}
+          res.data.list.forEach(delivery => {
+            deliveryPhoneMap[delivery.username] = delivery.phone
+          })
+
+          // 为订单填充配送员电话
+          this.orderList.forEach(order => {
+            if (order.deliveryStaff && !order.deliveryPhone) {
+              order.deliveryPhone = deliveryPhoneMap[order.deliveryStaff] || null
+            }
+          })
+        }
+      } catch (error) {
+        console.error('获取配送员信息失败:', error)
       }
     },
 
