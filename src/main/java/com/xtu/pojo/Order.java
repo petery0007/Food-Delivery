@@ -1,5 +1,6 @@
 package com.xtu.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -19,8 +20,13 @@ public class Order {
     private BigDecimal deliveryFee;// 配送费
     private BigDecimal totalAmount;// 订单总额
     private Integer status;// 订单状态 0:待支付 1:配送中 2:待收货 3:已完成 4:已取消
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime createTime;// 创建时间
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime finishTime;// 完成时间
+
     private String deliveryStaff;// 配送员
 
 
