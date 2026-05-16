@@ -106,4 +106,13 @@ public interface OrderMapper {
             "</script>")
     Integer countAllOrders(Integer status, String receiver, String deliveryStaff);
 
+    @Select("SELECT * FROM orders WHERE user_id = #{userId} AND status = 3 ORDER BY create_time DESC")
+    List<Order> getCompletedOrdersByUserId(Integer userId);
+
+    @Select("SELECT * FROM orders WHERE user_id = #{userId} AND status = #{status} ORDER BY create_time DESC")
+    List<Order> getOrdersByUserIdWithStatus(Integer userId, Integer status);
+
+
+
 }
+
