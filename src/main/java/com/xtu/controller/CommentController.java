@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/user/review")
+@RequestMapping("/api/v1/user/review")
 public class CommentController {
 
     @Autowired

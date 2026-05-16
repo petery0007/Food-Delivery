@@ -177,11 +177,11 @@ public class CommentServiceImpl implements CommentService {
     private List<ReviewVO> getPendingReviews(Integer userId) {
         List<ReviewVO> pendingReviews = new ArrayList<>();
 
-        List<Order> deliveringOrders = orderMapper.getOrdersByUserIdWithStatus(userId, 2);
+        //List<Order> deliveringOrders = orderMapper.getOrdersByUserIdWithStatus(userId, 2);
         List<Order> completedOrders = orderMapper.getOrdersByUserIdWithStatus(userId, 3);
 
         List<Order> allRelevantOrders = new ArrayList<>();
-        allRelevantOrders.addAll(deliveringOrders);
+        //allRelevantOrders.addAll(deliveringOrders);
         allRelevantOrders.addAll(completedOrders);
 
         for (Order order : allRelevantOrders) {

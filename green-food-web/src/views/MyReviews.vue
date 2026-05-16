@@ -324,7 +324,7 @@ export default {
     },
 
     openReviewDialog(review) {
-      this.currentReviewProduct = review.product
+      this.currentReviewProduct = review
       this.reviewForm = {
         rating: 5,
         comment: ''

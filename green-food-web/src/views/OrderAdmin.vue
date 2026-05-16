@@ -210,7 +210,7 @@ export default {
       currentOrder: null,
 
       // 模拟数据开关（后端未实现时使用）
-      useMockData: true
+      useMockData: false
     }
   },
   mounted() {
