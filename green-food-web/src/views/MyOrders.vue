@@ -687,7 +687,13 @@ export default {
       // 保存当前要支付的订单
       this.currentPayOrder = order
       
-      // 检查余额是否足够
+      // 如果是货到付款，直接支付，不需要检查余额
+      if (order.paymentType === 'cod') {
+        this.confirmPay(order)
+        return
+      }
+      
+      // 余额支付，检查余额是否足够
       if (this.userBalance < order.totalAmount) {
         this.$confirm(
             `您的余额不足，当前余额：¥${this.userBalance.toFixed(2)}，应付金额：¥${order.totalAmount.toFixed(2)}。是否立即充值？`,
