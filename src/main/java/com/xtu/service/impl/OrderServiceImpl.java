@@ -261,6 +261,21 @@ public class OrderServiceImpl implements OrderService {
                 return Result.success(200, "支付成功");
             } else if ("cod".equals(order.getPaymentType())) {
                 log.info("选择货到付款，无需扣款");
+                // 分配配送员
+                List<User> idleDeliveryUsers = userMapper.selectIdleDeliveryUsers();
+                if (idleDeliveryUsers == null || idleDeliveryUsers.isEmpty()) {
+                    return Result.error(400, "当前没有空闲的配送员");
+                }
+
+                Random random = new Random();
+                User selectedDelivery = idleDeliveryUsers.get(random.nextInt(idleDeliveryUsers.size()));
+
+                userMapper.updateDeliveryStatus(selectedDelivery.getId(), "配送中");
+
+                orderMapper.assignDelivery(orderId, selectedDelivery.getUsername(), 1);
+
+                log.info("订单 {} 分配配送员成功: {}", order.getId(), selectedDelivery.getUsername());
+
                 orderMapper.updateOrderStatus(orderId, 1);
                 return Result.success(200, "选择货到付款，无需扣款");
             }
