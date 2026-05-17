@@ -116,7 +116,6 @@ export default {
       editRules: {
         username: [
           { required: true, message: '账号名称不能为空', trigger: 'blur' },
-          { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
         ],
         phone: [
           { required: true, message: '手机号不能为空', trigger: 'blur' },

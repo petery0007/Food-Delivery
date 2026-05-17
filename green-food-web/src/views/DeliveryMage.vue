@@ -11,6 +11,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" @click="onSearchButtonClick">查询</el-button>
+          <el-button icon="el-icon-refresh" @click="onResetButtonClick">重置</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -138,6 +139,19 @@ export default {
           this.queryParams.username,
           this.queryParams.phone
       )
+    },
+
+    onResetButtonClick() {
+      this.searchForm = {
+        username: '',
+        phone: ''
+      }
+      this.queryParams = {
+        username: '',
+        phone: ''
+      }
+      this.currentPage = 1
+      this.loadDriverList(1, this.pageSize)
     },
 
     // 分页切换
