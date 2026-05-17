@@ -32,7 +32,7 @@
     <el-card shadow="never" style="margin-top: 20px;">
       <el-table :data="tableData" border style="width: 100%" v-loading="loading">
         <el-table-column type="index" label="序号" width="60" align="center"></el-table-column>
-        <el-table-column prop="orderId" label="订单编号" align="center" width="160"></el-table-column>
+        <el-table-column prop="id" label="订单编号" align="center" width="160"></el-table-column>
         <el-table-column label="收货人" align="center" width="100">
           <template slot-scope="scope">
             {{ scope.row.receiver || '-' }}
@@ -122,7 +122,7 @@
     <el-dialog title="订单详情" :visible.sync="detailVisible" width="60%">
       <el-card shadow="never" v-if="currentOrder">
         <el-descriptions title="订单信息" :column="2" border>
-          <el-descriptions-item label="订单编号">{{ currentOrder.orderId }}</el-descriptions-item>
+          <el-descriptions-item label="订单编号">{{ currentOrder.id }}</el-descriptions-item>
           <el-descriptions-item label="订单状态">
             <el-tag :type="getStatusType(currentOrder.status)">
               {{ getStatusText(currentOrder.status) }}
