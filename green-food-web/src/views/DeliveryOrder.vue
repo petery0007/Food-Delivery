@@ -163,7 +163,7 @@ export default {
       }
       const statusMap = {
         'delivering': 1,
-        'delivered': 2
+        'delivered': 2  // 已送达标签默认显示状态2
       }
       return statusMap[this.activeTab]
     }
@@ -181,23 +181,39 @@ export default {
     async loadOrders() {
       this.loading = true
       try {
-        let url = `/delivery/order/list?deliveryId=${this.deliveryId}&pageNum=${this.currentPage}&pageSize=${this.pageSize}`
-
-        if (this.currentStatus !== null) {
-          url += `&status=${this.currentStatus}`
-        }
-
-        const res = await request.get(url)
-
-        if (res.data && res.data.list) {
-          this.orderList = res.data.list
-          this.total = res.data.total || 0
-          this.loading = false
+        // 如果是"已送达"标签，需要分别获取状态2和状态3的订单
+        if (this.activeTab === 'delivered') {
+          const [res2, res3] = await Promise.all([
+            request.get(`/delivery/order/list?deliveryId=${this.deliveryId}&pageNum=${this.currentPage}&pageSize=${this.pageSize}&status=2`),
+            request.get(`/delivery/order/list?deliveryId=${this.deliveryId}&pageNum=${this.currentPage}&pageSize=${this.pageSize}&status=3`)
+          ])
+          
+          const list2 = res2.data && res2.data.list ? res2.data.list : []
+          const list3 = res3.data && res3.data.list ? res3.data.list : []
+          
+          // 合并两个状态的订单
+          this.orderList = [...list2, ...list3]
+          this.total = (res2.data && res2.data.total ? res2.data.total : 0) + 
+                       (res3.data && res3.data.total ? res3.data.total : 0)
         } else {
-          this.orderList = []
-          this.total = 0
-          this.loading = false
+          // 其他标签正常请求
+          let url = `/delivery/order/list?deliveryId=${this.deliveryId}&pageNum=${this.currentPage}&pageSize=${this.pageSize}`
+          
+          if (this.currentStatus !== null) {
+            url += `&status=${this.currentStatus}`
+          }
+          
+          const res = await request.get(url)
+          
+          if (res.data && res.data.list) {
+            this.orderList = res.data.list
+            this.total = res.data.total || 0
+          } else {
+            this.orderList = []
+            this.total = 0
+          }
         }
+        this.loading = false
       } catch (error) {
         console.error('加载配送订单失败，使用模拟数据:', error)
         this.loadMockOrders()
@@ -416,7 +432,10 @@ export default {
       ]
 
       // 根据当前选中的状态过滤订单
-      if (this.currentStatus !== null) {
+      if (this.activeTab === 'delivered') {
+        // 已送达标签显示状态2和3的订单
+        this.orderList = allOrders.filter(order => order.status === 2 || order.status === 3)
+      } else if (this.currentStatus !== null) {
         this.orderList = allOrders.filter(order => order.status === this.currentStatus)
       } else {
         this.orderList = allOrders
