@@ -30,5 +30,5 @@ public interface UserService {
 
     Result getAllPeisong(Integer page, Integer pageSize);
 
-    Result getPeisongByKeywords(Integer page, Integer pageSize, UserInfo2 userInfo2);
+    Result getPeisongByKeywords(Integer page, Integer pageSize, String username, String phone);
 }

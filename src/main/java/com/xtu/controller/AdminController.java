@@ -83,6 +83,17 @@ public class AdminController {
         return userService.getAllPeisong(page, pageSize);
     }
 
+    // 搜索配送员列表（支持姓名和手机号条件查询）
+    @GetMapping("/peisong/list")
+    public Result getPeisongByKeywords(@RequestParam(defaultValue = "1") Integer page,
+                                       @RequestParam(defaultValue = "10") Integer pageSize,
+                                       @RequestParam(required = false) String username,
+                                       @RequestParam(required = false) String phone){
+        log.info("搜索配送员，page: {}, pageSize: {}, username: {}, phone: {}",
+                page, pageSize, username, phone);
+        return userService.getPeisongByKeywords(page, pageSize, username, phone);
+    }
+
     // 获取所有订单（支持分页和多条件搜索）
     @GetMapping("/orders")
     public Result getAllOrders(@RequestParam(defaultValue = "1") Integer page,

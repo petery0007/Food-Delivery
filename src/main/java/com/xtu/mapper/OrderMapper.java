@@ -47,6 +47,17 @@ public interface OrderMapper {
     int assignDelivery(Integer id, String deliveryStaff, Integer status);
 
     //分页获取订单
+    @Select("SELECT * FROM orders WHERE user_id = #{userId} AND status = #{status} ORDER BY create_time DESC LIMIT #{offset}, #{pageSize}")
+    List<Order> getOrdersByUserIdWithStatus(Integer userId, Integer status);
+
+    @Select("SELECT COUNT(*) FROM orders WHERE user_id = #{userId} AND status = #{status}")
+    Integer countOrdersByUserIdWithStatus(Integer userId, Integer status);
+
+    @Select("SELECT * FROM orders WHERE user_id = #{userId} AND status = #{status} ORDER BY create_time DESC LIMIT #{offset}, #{pageSize}")
+    List<Order> getOrdersByUserIdWithStatusPage(Integer userId, Integer status, Integer offset, Integer pageSize);
+
+
+    //分页获取订单
     @Select("SELECT * FROM orders WHERE user_id = #{userId} ORDER BY create_time DESC LIMIT #{offset}, #{pageSize}")
     List<Order> getOrdersByUserIdPage(Integer userId, Integer offset, Integer pageSize);
 
@@ -109,8 +120,7 @@ public interface OrderMapper {
     @Select("SELECT * FROM orders WHERE user_id = #{userId} AND status = 3 ORDER BY create_time DESC")
     List<Order> getCompletedOrdersByUserId(Integer userId);
 
-    @Select("SELECT * FROM orders WHERE user_id = #{userId} AND status = #{status} ORDER BY create_time DESC")
-    List<Order> getOrdersByUserIdWithStatus(Integer userId, Integer status);
+
 
 
 

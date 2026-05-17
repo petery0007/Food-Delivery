@@ -28,9 +28,10 @@ public class OrderController {
     @GetMapping("/user/order/list")
     public Result getOrderList(HttpServletRequest request,
                                @RequestParam(defaultValue = "1") Integer page,
-                               @RequestParam(defaultValue = "10") Integer pageSize){
-        log.info("获取订单列表，页码: {}, 每页数量: {}", page, pageSize);
-        return orderService.getOrderList(request, page, pageSize);
+                               @RequestParam(defaultValue = "10") Integer pageSize,
+                               @RequestParam(required = false) Integer status){
+        log.info("获取订单列表，页码: {}, 每页数量: {}, 状态: {}", page, pageSize, status);
+        return orderService.getOrderList(request, page, pageSize, status);
     }
 
     // 支付订单

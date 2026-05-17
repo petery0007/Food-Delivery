@@ -77,6 +77,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result updateUser(HttpServletRequest request, User user) {
         log.info("修改用户信息");
+
+        if(userMapper.selectByPhone(user.getPhone()) != null){
+            return Result.error(400, "手机号已被注册");
+        }
+
         String token = request.getHeader("token");
         Claims claims = JwtUtils.parseToken(token);
         Integer id = (Integer) claims.get("id");
@@ -280,8 +285,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result getPeisongByKeywords(Integer page, Integer pageSize, UserInfo2 userInfo2) {
-        log.info("获取用户列表，页码: {}, 每页数量: {}", page, pageSize);
+    public Result getPeisongByKeywords(Integer page, Integer pageSize, String username, String phone) {
+        log.info("搜索配送员列表，页码: {}, 每页数量: {}, 姓名: {}, 手机号: {}",
+                page, pageSize, username, phone);
 
         if (page == null || page < 1) {
             page = 1;
@@ -292,50 +298,46 @@ public class UserServiceImpl implements UserService {
 
         int offset = (page - 1) * pageSize;
 
-        if(userInfo2 == null){
-            List<User> peisong = userMapper.selectAllPeisongByPage(offset, pageSize);
-            Integer total = peisong.size();
+        List<User> peisong;
 
-            Map<String, Object> data = new HashMap<>();
-            data.put("list", peisong);
-            data.put("total", total);
+        boolean hasUsername = username != null && !username.trim().isEmpty();
+        boolean hasPhone = phone != null && !phone.trim().isEmpty();
 
-            return Result.success(200, "获取成功", data);
-        }
-        else if(userInfo2.getUsername() == null){
-            List<User> peisong = userMapper.selectPeisongByPhone(offset, pageSize, userInfo2.getPhone());
-            int total = peisong.size();
-            if(total == 0){
-                return Result.error(401, "查询用户不存在");
-            }
-            Map<String, Object> data = new HashMap<>();
-            data.put("list", peisong);
-            data.put("total", total);
-            return Result.success(200, "获取成功", data);
-        }
-        else if (userInfo2.getPhone() == null) {
-            List<User> peisong = userMapper.selectPeisongByUsername(offset, pageSize, userInfo2.getUsername());
-            int total = peisong.size();
-            if(total == 0){
-                return Result.error(401, "查询用户不存在");
-            }
-            Map<String, Object> data = new HashMap<>();
-            data.put("list", peisong);
-            data.put("total", total);
-            return Result.success(200, "获取成功", data);
-
+        if (!hasUsername && !hasPhone) {
+            peisong = userMapper.selectAllPeisongByPage(offset, pageSize);
+        } else if (hasUsername && hasPhone) {
+            peisong = userMapper.selectPeisongByUsernameAndPhone(offset, pageSize, username, phone);
+        } else if (hasUsername) {
+            peisong = userMapper.selectPeisongByUsername(offset, pageSize, username);
+        } else {
+            peisong = userMapper.selectPeisongByPhone(offset, pageSize, phone);
         }
 
+        Integer total = countPeisongByCondition(username, phone);
 
-        List<User> peisong = userMapper.selectPeisongByUsernameAndPhone(offset, pageSize, userInfo2.getUsername(), userInfo2.getPhone());
-        int total = peisong.size();
-        if(total == 0){
-            return Result.error(401, "查询用户不存在");
-        }
         Map<String, Object> data = new HashMap<>();
         data.put("list", peisong);
         data.put("total", total);
 
         return Result.success(200, "获取成功", data);
+    }
+
+    private Integer countPeisongByCondition(String username, String phone) {
+        boolean hasUsername = username != null && !username.trim().isEmpty();
+        boolean hasPhone = phone != null && !phone.trim().isEmpty();
+
+        if (!hasUsername && !hasPhone) {
+            List<User> all = userMapper.selectAllPeisongByPage(0, Integer.MAX_VALUE);
+            return all.size();
+        } else if (hasUsername && hasPhone) {
+            List<User> list = userMapper.selectPeisongByUsernameAndPhone(0, Integer.MAX_VALUE, username, phone);
+            return list.size();
+        } else if (hasUsername) {
+            List<User> list = userMapper.selectPeisongByUsername(0, Integer.MAX_VALUE, username);
+            return list.size();
+        } else {
+            List<User> list = userMapper.selectPeisongByPhone(0, Integer.MAX_VALUE, phone);
+            return list.size();
+        }
     }
 }

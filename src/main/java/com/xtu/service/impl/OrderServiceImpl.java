@@ -165,7 +165,7 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public Result getOrderList(HttpServletRequest request, Integer page, Integer pageSize) {
+    public Result getOrderList(HttpServletRequest request, Integer page, Integer pageSize, Integer status) {
         try {
             String token = request.getHeader("token");
             Claims claims = JwtUtils.parseToken(token);
@@ -180,9 +180,16 @@ public class OrderServiceImpl implements OrderService {
 
             Integer offset = (page - 1) * pageSize;
 
-            List<Order> orders = orderMapper.getOrdersByUserIdPage(userId, offset, pageSize);
+            List<Order> orders;
+            Integer total;
 
-            Integer total = orderMapper.countOrdersByUserId(userId);
+            if (status != null) {
+                orders = orderMapper.getOrdersByUserIdWithStatusPage(userId, status, offset, pageSize);
+                total = orderMapper.countOrdersByUserIdWithStatus(userId, status);
+            } else {
+                orders = orderMapper.getOrdersByUserIdPage(userId, offset, pageSize);
+                total = orderMapper.countOrdersByUserId(userId);
+            }
 
             for (Order order : orders) {
                 List<OrderItemEntity> items = orderMapper.getOrderItemsByOrderId(order.getId());

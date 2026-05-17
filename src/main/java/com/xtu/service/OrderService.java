@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public interface OrderService {
     Result createOrder(HttpServletRequest request, OrderCreateRequest orderRequest);
 
-    Result getOrderList(HttpServletRequest request, Integer page, Integer pageSize);
+    Result getOrderList(HttpServletRequest request, Integer page, Integer pageSize, Integer status);
 
     Result payOrder(HttpServletRequest request, Integer orderId);
 
