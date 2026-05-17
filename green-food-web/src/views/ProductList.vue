@@ -45,7 +45,6 @@
           <template slot-scope="scope">
             <el-button size="mini" type="info" @click="toggleProductStatus(scope.row)">上下架</el-button>
             <el-button size="mini" type="primary" @click="viewInfo(scope.row.id)">详情</el-button>
-            <el-button size="mini" type="danger" @click="deleteProduct(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -221,15 +220,6 @@ export default {
       this.$confirm(`确定要将该商品 ${newStatus} 吗?`, '提示').then(() => {
         request.post(`/admin/products/status/${row.id}`, { status: newStatus }).then(res => {
           this.$message.success('状态更新成功');
-          this.initializeProductPage();
-        });
-      }).catch(() => {});
-    },
-
-    deleteProduct(productId) {
-      this.$confirm('确定要删除吗?', '警告', { type: 'error' }).then(() => {
-        request.delete(`/admin/products/${productId}`).then(res => {
-          this.$message.success('删除成功');
           this.initializeProductPage();
         });
       }).catch(() => {});

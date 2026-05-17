@@ -84,14 +84,6 @@ NEW_FILE_CODE
                 >
                   {{ product.status === '上架' ? '下架' : '上架' }}
                 </el-button>
-                <el-button
-                    type="danger"
-                    size="large"
-                    icon="el-icon-delete"
-                    @click="deleteProduct"
-                >
-                  删除商品
-                </el-button>
               </div>
 
               <div class="producer-section" v-if="product.producer">
@@ -510,31 +502,6 @@ export default {
         } catch (error) {
           console.error('更新状态失败:', error)
           this.$message.error('操作失败，请稍后重试')
-        }
-      }).catch(() => {
-        // 用户取消操作
-      })
-    },
-
-    // 管理端：删除商品
-    deleteProduct() {
-      this.$confirm('确定要删除该商品吗？此操作不可恢复！', '警告', {
-        confirmButtonText: '确定删除',
-        cancelButtonText: '取消',
-        type: 'error'
-      }).then(async () => {
-        try {
-          const res = await request.delete(`/admin/products/${this.product.id}`)
-
-          this.$message.success('删除成功')
-
-          // 延迟一下再返回，让用户看到成功提示
-          setTimeout(() => {
-            this.goBack()
-          }, 1000)
-        } catch (error) {
-          console.error('删除失败:', error)
-          this.$message.error('删除失败，请稍后重试')
         }
       }).catch(() => {
         // 用户取消操作
