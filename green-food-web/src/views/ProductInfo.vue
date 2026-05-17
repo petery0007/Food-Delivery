@@ -497,7 +497,7 @@ export default {
         type: 'warning'
       }).then(async () => {
         try {
-          const res = await request.post(`/products/status/${this.product.id}`, {
+          const res = await request.post(`/admin/products/status/${this.product.id}`, {
             status: newStatus
           })
 
@@ -524,7 +524,7 @@ export default {
         type: 'error'
       }).then(async () => {
         try {
-          const res = await request.delete(`/products/${this.product.id}`)
+          const res = await request.delete(`/admin/products/${this.product.id}`)
 
           this.$message.success('删除成功')
 
