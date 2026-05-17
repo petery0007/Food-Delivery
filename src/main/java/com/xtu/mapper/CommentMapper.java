@@ -12,13 +12,13 @@ public interface CommentMapper {
     int insertComment(Comment comment);
 
     @Select("SELECT * FROM comment WHERE user_id = #{userId} ORDER BY create_time DESC LIMIT #{offset}, #{pageSize}")
-    List<Comment> selectCommentsByUserId(Integer userId, Integer offset, Integer pageSize);
+    List<Comment> selectCommentsByUserId(@Param("userId") Integer userId, @Param("offset") Integer offset, @Param("pageSize") Integer pageSize);
 
     @Select("SELECT COUNT(*) FROM comment WHERE user_id = #{userId}")
     Integer countCommentsByUserId(Integer userId);
 
     @Select("SELECT * FROM comment WHERE goods_id = #{goodsId} ORDER BY create_time DESC LIMIT #{offset}, #{pageSize}")
-    List<Comment> selectCommentsByGoodsId(Integer goodsId, Integer offset, Integer pageSize);
+    List<Comment> selectCommentsByGoodsId(@Param("goodsId") Integer goodsId, @Param("offset") Integer offset, @Param("pageSize") Integer pageSize);
 
     @Select("SELECT COUNT(*) FROM comment WHERE goods_id = #{goodsId}")
     Integer countCommentsByGoodsId(Integer goodsId);
