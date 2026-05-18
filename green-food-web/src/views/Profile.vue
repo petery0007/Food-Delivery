@@ -27,7 +27,13 @@
             </el-tag>
           </el-descriptions-item>
           <el-descriptions-item label="账户余额" v-if="userInfo.role === 'user'">
-            <span style="color: #f56c6c; font-size: 18px; font-weight: bold;">￥{{ userInfo.money || '0.00' }}</span>
+            <div style="display: flex; align-items: center;">
+              <span style="color: #f56c6c; font-size: 18px; font-weight: bold;">￥{{ userInfo.money || '0.00' }}</span>
+              <!-- 充值按钮，点击调用子组件的 open 方法 -->
+              <el-button type="success" size="mini" plain @click="$refs.rechargeDialog.open()">
+                立刻充值
+              </el-button>
+            </div>
           </el-descriptions-item>
         </el-descriptions>
       </div>
@@ -69,13 +75,21 @@
       </div>
     </el-dialog>
 
+    <!-- 【新增】：挂载充值弹窗组件 -->
+    <!-- 监听 @success 事件，当充值成功时，自动调用 getUserInfo 重新获取最新余额 -->
+    <RechargeModal ref="rechargeDialog" @success="getUserInfo" />
+
   </div>
 </template>
 
 <script>
 import request from '@/utils/request'
+import RechargeModal from '@/components/Recharge.vue'
 
 export default {
+  components: {
+    RechargeModal
+  },
   data() {
     // 自定义验证规则：确认密码必须和新密码一致
     const validateConfirmPwd = (rule, value, callback) => {
@@ -102,7 +116,6 @@ export default {
       editRules: {
         username: [
           { required: true, message: '账号名称不能为空', trigger: 'blur' },
-          { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
         ],
         phone: [
           { required: true, message: '手机号不能为空', trigger: 'blur' },

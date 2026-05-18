@@ -11,6 +11,7 @@
           background-color="#304156"
           text-color="#bfcbd9"
           active-text-color="#409EFF"
+          :default-active="activeMenu"
           router>
 
         <!-- 【权限控制核心】：使用 v-if 判断当前角色是否包含在该菜单的允许角色数组中 -->
@@ -21,7 +22,6 @@
           <el-menu-item index="/layout/users"><i class="el-icon-user"></i>用户信息管理</el-menu-item>
           <el-menu-item index="/layout/products"><i class="el-icon-goods"></i>商品信息管理</el-menu-item>
           <el-menu-item index="/layout/orders-admin"><i class="el-icon-s-order"></i>订单信息管理</el-menu-item>
-          <el-menu-item index="/layout/notices"><i class="el-icon-message-solid"></i>公告信息管理</el-menu-item>
           <el-menu-item index="/layout/delivery-staff"><i class="el-icon-truck"></i>配送人员管理</el-menu-item>
         </template>
 
@@ -29,6 +29,7 @@
         <template v-if="currentRole === 'user'">
           <el-menu-item index="/layout/profile"><i class="el-icon-s-custom"></i>个人中心</el-menu-item>
           <el-menu-item index="/layout/shop"><i class="el-icon-shopping-cart-2"></i>浏览商品信息</el-menu-item>
+          <el-menu-item index="/layout/cart"><i class="el-icon-shopping-cart-1"></i>购物车</el-menu-item>
           <el-menu-item index="/layout/my-orders"><i class="el-icon-s-ticket"></i>我的订单管理</el-menu-item>
           <el-menu-item index="/layout/reviews"><i class="el-icon-chat-dot-round"></i>我的商品评价</el-menu-item>
         </template>
@@ -68,6 +69,20 @@ export default {
       currentRole: '', // 当前登录的角色
       currentName: ''
     };
+  },
+  computed: {
+    activeMenu() {
+      const route = this.$route
+      const { path } = route
+
+      // 如果是订单确认页面，高亮购物车菜单
+      if (path === '/layout/order-confirm') {
+        return '/layout/cart'
+      }
+
+      // 其他情况返回当前路径，让 el-menu 自动匹配
+      return path
+    }
   },
   created() {
     // 页面创建时，从本地存储中取出登录时保存的信息

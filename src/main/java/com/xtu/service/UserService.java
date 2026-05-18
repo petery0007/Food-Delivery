@@ -1,10 +1,10 @@
 package com.xtu.service;
 
-import com.xtu.pojo.PasswordUpdateRequest;
-import com.xtu.pojo.User;
-import com.xtu.pojo.UserInfoVO;
+import com.xtu.pojo.*;
 import com.xtu.utils.Result;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.math.BigDecimal;
 
 public interface UserService {
     Result register(User user);
@@ -17,4 +17,18 @@ public interface UserService {
                           PasswordUpdateRequest passwordUpdateRequest);
 
     Result getUserInfo(HttpServletRequest request);
+
+    Result updateUserMoney(HttpServletRequest request, BigDecimal amount);
+
+    Result getAllProducts(Integer page, Integer pageSize);
+
+    Result getProductsByKeywordsAndSpecification(Integer page, Integer pageSize, ProductInfo productInfo);
+
+    Result getAllUser(Integer page, Integer pageSize);
+
+    Result getUsersByKeywords(Integer page, Integer pageSize, UserInfo2 userInfo2);
+
+    Result getAllPeisong(Integer page, Integer pageSize);
+
+    Result getPeisongByKeywords(Integer page, Integer pageSize, String username, String phone);
 }

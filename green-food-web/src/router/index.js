@@ -25,11 +25,78 @@ const routes = [
                 name: 'ProductList',
                 component: () => import('../views/ProductList.vue') // 你上一步写的商品列表！
             },
+            // 新增商品详情页(管理端）
+             {
+                 path: 'product-info/:id',
+                 name: 'ProductInfo',
+                 component: () => import('../views/ProductInfo.vue'),
+                 props: true
+             },
             // 新增个人中心
             {
                 path: 'profile',
                 name: 'Profile',
                 component: () => import('../views/Profile.vue')
+            },
+            // 新增用户端浏览商品界面
+            {
+                path: 'shop',
+                name: 'Shop',
+                component: () => import('../views/ProductBrow.vue')
+            },
+            {
+                path: 'delivery-staff',
+                name: 'DeliveryMage',
+                component: () => import('../views/DeliveryMage.vue')
+            },
+            // 用户信息管理（管理员）
+            {
+                path: 'users',
+                name: 'UserManagement',
+                component: () => import('../views/UserManagement.vue')
+            },
+            // 新增品详情界面（用户端）
+            {
+                path: 'product-info-user/:id',
+                name: 'ProductInfoUser',
+                component: () => import('../views/ProductInfo.vue'),
+                props: true
+            },
+            // 新增用户端购物车界面
+            {
+                path: 'cart',
+                name: 'ShoppingCart',
+                component: () => import('../views/ShoppingCart.vue')
+            },
+            // 新增用户端订单界面
+            {
+                path: 'order-confirm',
+                name: 'OrderConfirm',
+                component: () => import('../views/Order.vue'),
+                props: true
+            },
+            // 新增用户端我的订单管理
+            {
+                path: 'my-orders',
+                name: 'MyOrders',
+                component: () => import('../views/MyOrders.vue')
+            },
+            // 新增用户端商品评价界面
+            {
+                path: 'reviews',
+                name: 'MyReviews',
+                component: () => import('../views/MyReviews.vue')
+            },
+            // 新增配送员端配送订单界面
+            {
+                path: 'delivery-tasks',
+                name: 'DeliveryTasks',
+                component: () => import('../views/DeliveryOrder.vue')
+            },
+            {
+                path: 'orders-admin',
+                name: 'OrderAdmin',
+                component: () => import('../views/OrderAdmin.vue')
             }
         ]
     }

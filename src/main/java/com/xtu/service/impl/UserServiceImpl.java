@@ -1,5 +1,6 @@
 package com.xtu.service.impl;
 
+import com.xtu.mapper.ProductMapper;
 import com.xtu.mapper.UserMapper;
 import com.xtu.pojo.*;
 import com.xtu.service.UserService;
@@ -12,7 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -20,6 +23,8 @@ import java.util.Map;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private ProductMapper productMapper;
     @Override
     public Result register(User user) {
         //判断用户名是否存在
@@ -54,6 +59,10 @@ public class UserServiceImpl implements UserService {
         if(!user.getPassword().equals(dto.getPassword())){
             return Result.error(400, "密码错误");
         }
+        //判断角色是否正确
+        if(!user.getRole().equals(dto.getRole())){
+            return Result.error(400, "角色不匹配");
+        }
         //生成token
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", user.getId());
@@ -68,6 +77,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result updateUser(HttpServletRequest request, User user) {
         log.info("修改用户信息");
+
+        if(userMapper.selectByPhone(user.getPhone()) != null){
+            return Result.error(400, "手机号已被注册");
+        }
+
         String token = request.getHeader("token");
         Claims claims = JwtUtils.parseToken(token);
         Integer id = (Integer) claims.get("id");
@@ -103,5 +117,227 @@ public class UserServiceImpl implements UserService {
         User dto = userMapper.selectById(id);
         UserInfo2 userInfo = new UserInfo2(dto.getId(), dto.getUsername(), dto.getRole(), dto.getMoney(),dto.getPhone());
         return Result.success(200, "获取成功", userInfo);
+    }
+
+    @Override
+    public Result updateUserMoney(HttpServletRequest request, BigDecimal amount) {
+        String token = request.getHeader("token");
+        Claims claims = JwtUtils.parseToken(token);
+        Integer id = (Integer) claims.get("id");
+        userMapper.updateUserMoney(id, amount);
+        return Result.success(200, "充值成功");
+    }
+
+    @Override
+    public Result getAllProducts(Integer page, Integer pageSize) {
+        log.info("获取商品列表，页码: {}, 每页数量: {}", page, pageSize);
+        Integer offset = (page - 1) * pageSize;
+        List<Product> products = productMapper.selectByPageShangjia(offset, pageSize);
+        Integer total = productMapper.countProductsShangjia();
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", products);
+        data.put("total", total);
+        return Result.success(200, "获取成功", data);
+    }
+
+    @Override
+    public Result getProductsByKeywordsAndSpecification(Integer page, Integer pageSize, ProductInfo productInfo) {
+        log.info("获取商品列表，页码: {}, 每页数量: {}", page, pageSize);
+
+        if (page == null || page < 1) {
+            page = 1;
+        }
+        if (pageSize == null || pageSize < 1 || pageSize > 100) {
+            pageSize = 10;
+        }
+
+        int offset = (page - 1) * pageSize;
+
+        if(productInfo == null){
+            List<Product> products = productMapper.selectByPageShangjia(offset, pageSize);
+            Integer total = productMapper.countProductsShangjia();
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", products);
+            data.put("total", total);
+
+            return Result.success(200, "获取成功", data);
+        }
+        else if(productInfo.getKeywords() == null){
+            List<Product> products = productMapper.selectBySpecificationShangjia(offset, pageSize, productInfo.getSpecification());
+            Integer total = productMapper.countProductsBySpecificationShangjia(productInfo.getSpecification());
+            if(total == null){
+                return Result.error(401, "查询商品不存在");
+            }
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", products);
+            data.put("total", total);
+            return Result.success(200, "获取成功", data);
+        } else if (productInfo.getSpecification() == null) {
+            List<Product> products = productMapper.selectByKeywordsShangjia(offset, pageSize, productInfo.getKeywords());
+            Integer total = productMapper.countProductsByKeywordsShangjia(productInfo.getKeywords());
+            if(total == null){
+                return Result.error(401, "查询商品不存在");
+            }
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", products);
+            data.put("total", total);
+            return Result.success(200, "获取成功", data);
+
+        }
+
+
+
+        List<Product> products = productMapper.selectByKeywordsAndSpecificationShangjia(offset, pageSize, productInfo.getSpecification(), productInfo.getKeywords());
+        Integer total = productMapper.countProductsByKeywordsAndSpecificationShangjia(productInfo.getSpecification(), productInfo.getKeywords());
+        if(total == null){
+            return Result.error(401, "查询商品不存在");
+        }
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", products);
+        data.put("total", total);
+
+        return Result.success(200, "获取成功", data);
+    }
+
+    @Override
+    public Result getAllUser(Integer page, Integer pageSize) {
+        log.info("获取用户列表，页码: {}, 每页数量: {}", page);
+        Integer offset = (page - 1) * pageSize;
+        List<User> users = userMapper.selectAllUserByPage(offset, pageSize);
+        Integer total = users.size();
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", users);
+        data.put("total", total);
+        return Result.success(200, "获取成功", data);
+    }
+
+    @Override
+    public Result getUsersByKeywords(Integer page, Integer pageSize, UserInfo2 userInfo2) {
+        log.info("获取用户列表，页码: {}, 每页数量: {}", page, pageSize);
+
+        if (page == null || page < 1) {
+            page = 1;
+        }
+        if (pageSize == null || pageSize < 1 || pageSize > 100) {
+            pageSize = 10;
+        }
+
+        int offset = (page - 1) * pageSize;
+
+        if(userInfo2 == null){
+            List<User> users = userMapper.selectAllUserByPage(offset, pageSize);
+            Integer total = users.size();
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", users);
+            data.put("total", total);
+
+            return Result.success(200, "获取成功", data);
+        }
+        else if(userInfo2.getUsername() == null){
+            List<User> users = userMapper.selectUserByPhone(offset, pageSize, userInfo2.getPhone());
+            int total = users.size();
+            if(total == 0){
+                return Result.error(400, "查询用户不存在");
+            }
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", users);
+            data.put("total", total);
+            return Result.success(200, "获取成功", data);
+        }
+        else if (userInfo2.getPhone() == null) {
+            List<User> users = userMapper.selectUserByUsername(offset, pageSize, userInfo2.getUsername());
+            int total = users.size();
+            if(total == 0){
+                return Result.error(400, "查询用户不存在");
+            }
+            Map<String, Object> data = new HashMap<>();
+            data.put("list", users);
+            data.put("total", total);
+            return Result.success(200, "获取成功", data);
+
+        }
+
+
+        List<User> users = userMapper.selectUserByUsernameAndPhone(offset, pageSize, userInfo2.getUsername(), userInfo2.getPhone());
+        int total = users.size();
+        if(total == 0){
+            return Result.error(400, "查询用户不存在");
+        }
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", users);
+        data.put("total", total);
+
+        return Result.success(200, "获取成功", data);
+    }
+
+    @Override
+    public Result getAllPeisong(Integer page, Integer pageSize) {
+        log.info("获取配送员列表，页码: {}, 每页数量: {}", page);
+        Integer offset = (page - 1) * pageSize;
+        List<User> peisong = userMapper.selectAllPeisongByPage(offset, pageSize);
+        Integer total = peisong.size();
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", peisong);
+        data.put("total", total);
+        return Result.success(200, "获取成功", data);
+    }
+
+    @Override
+    public Result getPeisongByKeywords(Integer page, Integer pageSize, String username, String phone) {
+        log.info("搜索配送员列表，页码: {}, 每页数量: {}, 姓名: {}, 手机号: {}",
+                page, pageSize, username, phone);
+
+        if (page == null || page < 1) {
+            page = 1;
+        }
+        if (pageSize == null || pageSize < 1 || pageSize > 100) {
+            pageSize = 10;
+        }
+
+        int offset = (page - 1) * pageSize;
+
+        List<User> peisong;
+
+        boolean hasUsername = username != null && !username.trim().isEmpty();
+        boolean hasPhone = phone != null && !phone.trim().isEmpty();
+
+        if (!hasUsername && !hasPhone) {
+            peisong = userMapper.selectAllPeisongByPage(offset, pageSize);
+        } else if (hasUsername && hasPhone) {
+            peisong = userMapper.selectPeisongByUsernameAndPhone(offset, pageSize, username, phone);
+        } else if (hasUsername) {
+            peisong = userMapper.selectPeisongByUsername(offset, pageSize, username);
+        } else {
+            peisong = userMapper.selectPeisongByPhone(offset, pageSize, phone);
+        }
+
+        Integer total = countPeisongByCondition(username, phone);
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", peisong);
+        data.put("total", total);
+
+        return Result.success(200, "获取成功", data);
+    }
+
+    private Integer countPeisongByCondition(String username, String phone) {
+        boolean hasUsername = username != null && !username.trim().isEmpty();
+        boolean hasPhone = phone != null && !phone.trim().isEmpty();
+
+        if (!hasUsername && !hasPhone) {
+            List<User> all = userMapper.selectAllPeisongByPage(0, Integer.MAX_VALUE);
+            return all.size();
+        } else if (hasUsername && hasPhone) {
+            List<User> list = userMapper.selectPeisongByUsernameAndPhone(0, Integer.MAX_VALUE, username, phone);
+            return list.size();
+        } else if (hasUsername) {
+            List<User> list = userMapper.selectPeisongByUsername(0, Integer.MAX_VALUE, username);
+            return list.size();
+        } else {
+            List<User> list = userMapper.selectPeisongByPhone(0, Integer.MAX_VALUE, phone);
+            return list.size();
+        }
     }
 }

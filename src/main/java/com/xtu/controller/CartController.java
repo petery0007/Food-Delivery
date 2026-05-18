@@ -1,0 +1,46 @@
+package com.xtu.controller;
+
+import com.xtu.pojo.Cart;
+import com.xtu.pojo.OrderCreateRequest;
+import com.xtu.service.CartService;
+import com.xtu.utils.Result;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@Slf4j
+@RequestMapping("/api/v1/user")
+public class CartController {
+
+    @Autowired
+    private CartService cartService;
+
+    // 添加购物车
+    @PostMapping("/cart/add")
+    public Result addCart(HttpServletRequest request, @RequestBody Cart cart){
+        log.info("添加购物车，cart: {}", cart);
+        return cartService.addCart(request, cart);
+    }
+
+    // 获取购物车
+    @GetMapping("/cart/{userId}")
+    public Result getCart(@PathVariable Integer userId){
+        return cartService.getCart(userId);
+    }
+
+    // 更新购物车商品
+    @PutMapping("/cart/update")
+    public Result updateCart(Integer id, Integer quantity){
+        return cartService.updateCart(id, quantity);
+    }
+
+    // 删除购物车商品
+    @DeleteMapping("/cart/{id}")
+    public Result deleteCart(@PathVariable Integer id){
+        return cartService.deleteCart(id);
+    }
+
+
+}
